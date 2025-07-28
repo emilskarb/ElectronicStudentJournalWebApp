@@ -16,12 +16,18 @@ namespace ElectronicStudentJournal.Data
             StudentEntityBuilder.ToTable("Students");
             StudentEntityBuilder.Property(p => p.FirstName).HasMaxLength(30).IsRequired(true);
             StudentEntityBuilder.Property(p => p.LastName).HasMaxLength(30).IsRequired(true);
-            StudentEntityBuilder.Property(p => p.NumerTelefonu).HasMaxLength(11).IsRequired(false);
+            StudentEntityBuilder.Property(p => p.PhoneNumber).HasMaxLength(11).IsRequired(false);
         }
 
-        public DbSet<Student> Student { get; protected set; }   //kolekcja naszych struktur w bazie naych (odwoływanie do tabeli)
+        public DbSet<Student> Students { get; protected set; }   //kolekcja naszych struktur w bazie naych (odwoływanie do tabeli)
+        public DbSet<Grade> Grades { get; protected set; }
 
 
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    optionsBuilder.UseSqlServer("Server=localhost;Database=JournallDb; Trusted_Connection=True; TrustServerCertificate=True;");
+        //    optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb; Database=JournallDb; Trusted_Connection=True;");
+        //}
 
     }
 }

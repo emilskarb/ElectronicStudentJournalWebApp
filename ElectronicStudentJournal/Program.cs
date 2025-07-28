@@ -1,13 +1,22 @@
 using ElectronicStudentJournal.Data;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-builder.Services.AddSingleton<WeatherForecastService>();
+//builder.Services.AddDbContext<ApplicationDbContext>(
+//    option => option.UseSqlServer(builder.Configuration.GetConnectionString("JournalConnectionString"))
+//    );
+
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+{
+    var cs = builder.Configuration.GetConnectionString("JournalConnectionString");
+    options.UseSqlServer(cs);
+});
 
 var app = builder.Build();
 
