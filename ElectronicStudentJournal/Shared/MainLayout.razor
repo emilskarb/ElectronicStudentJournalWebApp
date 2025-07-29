@@ -1,19 +1,43 @@
 ﻿@inherits LayoutComponentBase
 
-<PageTitle>ElectronicStudentJournal</PageTitle>
-
 <div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
 
-    <main>
-        <div class="top-row px-4">
-            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
-        </div>
+    <!-- GÓRNY PASEK NAWIGACYJNY (HEADER) -->
+    <header class="top-navbar">
+        <nav class="navbar-container">
+            <!-- Lewa strona paska -->
+            <div class="navbar-left">
+                <img src="https://penji.co/wp-content/uploads/2022/08/1.-centreville-layton-school-logo.jpg.webp" alt="Logo Szkoły" class="logo">
+                <a href="/" class="navbar-title">Dziennik Elektroniczny</a>
+            </div>
 
-        <article class="content px-4">
-            @Body
-        </article>
+            <!-- Prawa strona paska -->
+            <div class="navbar-right">
+                <div class="user-info-item">
+                    <span>Szczęśliwy numerek</span>
+                    <p class="lucky-number">7</p>
+                </div>
+                <div class="user-info-item text-right">
+                    <p>Jan Kowalski</p>
+                    <span>Uczeń</span>
+                </div>
+                <button class="logout-button">
+                    <span>Wyloguj</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                    </svg>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- GŁÓWNA TREŚĆ STRONY -->
+    <main role="main" class="main-content">
+        @Body
     </main>
+
+    <!-- Stopka -->
+    <footer class="footer">
+        &copy; 2024 - Dziennik Elektroniczny
+    </footer>
 </div>

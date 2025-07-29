@@ -16,10 +16,18 @@ namespace ElectronicStudentJournal.Models
         [RegularExpression(@"^[\p{L}]+$", ErrorMessage = "Nie można używać cyfr lub znaków spejcalnych")]
         public string LastName { get; set; }
 
+        [Required(ErrorMessage = "Proszę podać wiek")]
+        [Range(1, 100, ErrorMessage = "Wiek musi być w zakresie od 1 do 100")]
+        [RegularExpression(@"^[0-9]+$", ErrorMessage = "Można używać tylko cyfr")]
+        public int Age { get; set; }
+
         [Required(ErrorMessage = "Proszę podać numer telefonu")]
         [RegularExpression(@"^[0-9]+$", ErrorMessage = "Można używać tylko cyfr")]
         public int PeselNumber { get; set; }
 
+        [Required(ErrorMessage = "Data urodzenia jest wymagana")]
+        [DataType(DataType.Date)]
+        public DateTime BirthDate { get; set; }
 
         public string PhoneNumber { get; set; }
 

@@ -8,23 +8,23 @@ namespace ElectronicStudentJournal.Controllers
     [ApiController]
     public class StudentController : ControllerBase
     {
-        private readonly ILogger<StudentController>
+        //private readonly ILogger<StudentController>
 
-        public StudentController(ILogger<StudentController> logger)
-        {
-            _logger = logger;
-        }
+        //public StudentController(ILogger<StudentController> logger)
+        //{
+        //    _logger = logger;
+        //}
 
-        [HttpGet(Name = "GetStudent")]
-        public Task<IEnumerable<Student>> Get()
-        {
+        //[HttpGet(Name = "GetStudent")]
+        //public Task<IEnumerable<Student>> Get()
+        //{
 
-        }
+        //}
 
-        [HttpPost(Name = "AddStudent")]
-        public Student AddStudent()
-        {
+        //[HttpPost(Name = "AddStudent")]
+        //public Student AddStudent()
+        //{
 
-        }
+        //}
     }
 }

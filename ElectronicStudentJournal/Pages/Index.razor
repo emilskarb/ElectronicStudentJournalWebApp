@@ -1,9 +1,25 @@
 ﻿@page "/"
 
-<PageTitle>Index</PageTitle>
+<PageTitle>Strona główna</PageTitle>
 
-<h1>Hello, world!</h1>
-
-Welcome to your new app.
-
-<SurveyPrompt Title="How is Blazor working for you?" />
+<div class="content-container">
+    <div class="tile-grid">
+        @*<a href="grades" class="tile">*@
+        <NavLink href="grades" class="tile">
+            <h2>Oceny</h2>
+            <p>Zobacz swoje postępy w nauce</p>
+        </NavLink>
+        <a href="dane" class="tile">
+            <h2>Twoje Dane</h2>
+            <p>Sprawdź i zaktualizuj swoje informacje</p>
+        </a>
+        <a href="planzajec" class="tile">
+            <h2>Plan Zajęć</h2>
+            <p>Sprawdź harmonogram lekcji</p>
+        </a>
+        <a href="wiadomosci" class="tile">
+            <h2>Wiadomości</h2>
+            <p>Skontaktuj się z nauczycielami</p>
+        </a>
+    </div>
+</div>
