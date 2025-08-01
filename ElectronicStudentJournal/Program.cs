@@ -18,6 +18,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(cs);
 });
 
+builder.Services.AddTransient<DataGenerator>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

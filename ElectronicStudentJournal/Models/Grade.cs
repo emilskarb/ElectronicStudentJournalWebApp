@@ -11,7 +11,7 @@ namespace ElectronicStudentJournal.Models
 
         public string Subject { get; set; }
 
-        public DateTime GradeReceiving { get; set; }
+        public DateTime GradeReceivingDate { get; set; }
 
         public DateTime GradeSubmissionDate { get; set; }
 
@@ -24,7 +24,7 @@ namespace ElectronicStudentJournal.Models
         public int Section { get; set; }
 
 
-        public ICollection<Student> Student { get; set; }
+        public ICollection<StudentModel> Student { get; set; }
 
 
     }

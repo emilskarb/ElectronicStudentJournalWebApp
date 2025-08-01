@@ -1,11 +1,13 @@
-﻿@page "/gradez"
-@inject DataGenerator generejtor
-@using ElectronicStudentJournal.Models;
-@using ElectronicStudentJournal.Data;
+﻿@page "/personaldata"
+@inject DataGenerator dataGen
+@inject ApplicationDbContext DbContext 
+@using ElectronicStudentJournal.Models
 
-<h3>Grades</h3>
+<h3>StudentData</h3>
 
-<h2>witamy w ocenach</h2>
+@*<p>
+    @dataGen.GenerateStudent().ToString()
+</p>*@
 
 <table class="table table-striped">
     <thead>
@@ -22,7 +24,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var stud in ListaUczniow)
+        @foreach (var stud in students)
         {
             <tr>
                 <td>@stud.StudentId</td>
@@ -39,14 +41,20 @@
     </tbody>
 </table>
 
-<button type="button" class="btn btn-outline-primary" @onclick="WczytajUczniow">Dodaj ucznia</button>
+
+
+<button type="button" class="btn btn-outline-primary" @onclick="LoadData">Dodaj ucznia</button>
 
 @code {
-    List<StudentModel> ListaUczniow = new();
+    List<StudentModel> students = new();
 
-    public void WczytajUczniow()
+    private void LoadData()
     {
-        var results = generejtor.GenerateManyStudents().Take(10);
-        ListaUczniow.AddRange(results);
+        var results = dataGen.GenerateManyStudents().Take(10);
+        students.AddRange(results);
+        //foreach (var result in results)
+        //{
+        //    students.Add(result);
+        //}
     }
 }

@@ -4,6 +4,7 @@ using ElectronicStudentJournal.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ElectronicStudentJournal.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250730104505_StudGrades_3")]
+    partial class StudGrades_3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -80,7 +83,7 @@ namespace ElectronicStudentJournal.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
-                    b.Property<int?>("GradeId")
+                    b.Property<int>("GradeId")
                         .HasColumnType("int");
 
                     b.Property<string>("HomeAddress")
@@ -92,9 +95,8 @@ namespace ElectronicStudentJournal.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
-                    b.Property<string>("PeselNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("PeselNumber")
+                        .HasColumnType("int");
 
                     b.Property<string>("PhoneNumber")
                         .HasMaxLength(11)
@@ -105,37 +107,17 @@ namespace ElectronicStudentJournal.Migrations
                     b.HasIndex("GradeId");
 
                     b.ToTable("Students", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            StudentId = -1,
-                            Age = 2,
-                            BirthDate = new DateTime(1995, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FirstName = "testImie",
-                            HomeAddress = "ul test",
-                            LastName = "testNazwisko",
-                            PeselNumber = "1234567891",
-                            PhoneNumber = "123456789"
-                        },
-                        new
-                        {
-                            StudentId = -2,
-                            Age = 54,
-                            BirthDate = new DateTime(1990, 5, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FirstName = "testImie2",
-                            HomeAddress = "ul test",
-                            LastName = "testNazwisko2",
-                            PeselNumber = "698345671",
-                            PhoneNumber = "993456789"
-                        });
                 });
 
             modelBuilder.Entity("ElectronicStudentJournal.Models.Student", b =>
                 {
-                    b.HasOne("ElectronicStudentJournal.Models.Grade", null)
+                    b.HasOne("ElectronicStudentJournal.Models.Grade", "Grade")
                         .WithMany("Student")
-                        .HasForeignKey("GradeId");
+                        .HasForeignKey("GradeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Grade");
                 });
 
             modelBuilder.Entity("ElectronicStudentJournal.Models.Grade", b =>
