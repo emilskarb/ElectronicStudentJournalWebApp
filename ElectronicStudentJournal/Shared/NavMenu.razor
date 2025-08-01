@@ -14,16 +14,42 @@
                 <span class="oi oi-home" aria-hidden="true"></span> Home
             </NavLink>
         </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="oi oi-plus" aria-hidden="true"></span> Counter
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="fetchdata">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Fetch data
-            </NavLink>
-        </div>
+        @*panel dla Ucznia*@
+        <AuthorizeView Roles="Student">
+            <Authorized>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="grades">
+                        <span class="oi oi-plus" aria-hidden="true"></span> Grades
+                    </NavLink>
+                </div>
+            </Authorized>
+        </AuthorizeView>
+        @*panel dla Admina i Nauczyciela*@
+        <AuthorizeView Roles="Admin,Teacher">
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="AddGrade">
+                    <span class="oi oi-plus" aria-hidden="true"></span> Add Grade
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="Students">
+                    <span class="oi oi-list-rich" aria-hidden="true"></span> Students
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="GradesAdmin">
+                    <span class="oi oi-list-rich" aria-hidden="true"></span> GradesAdmin
+                </NavLink>
+            </div>
+        </AuthorizeView>
+        @*panel dla Admina*@
+        <AuthorizeView Roles="Admin">
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="AddStudent">
+                    <span class="oi oi-plus" aria-hidden="true"></span> Add Students
+                </NavLink>
+            </div>
+        </AuthorizeView>
     </nav>
 </div>
 

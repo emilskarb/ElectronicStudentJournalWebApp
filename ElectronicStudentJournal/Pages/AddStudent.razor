@@ -1,0 +1,150 @@
+﻿@page "/AddStudent"
+@using ElectronicStudentJournal.Models
+@inject ApplicationDbContext _context
+@inject NavigationManager NavigationManager
+@using Microsoft.EntityFrameworkCore
+@attribute [Authorize(Roles = "Admin")]
+@using static ElectronicStudentJournal.Pages.Account.RandomPassword
+
+<h3>Dodaj użytkownika</h3>
+
+<div>
+    <label for="wybor">Wybierz typ użytkownika:</label>
+    <InputSelect id="wybor" @bind-Value="val" class="form-control">
+        <option value="1">Student</option>
+        <option value="2">Teacher</option>
+    </InputSelect>
+</div>
+
+@if (val == 1)
+{
+    <h4>Formularz studenta</h4>
+    <EditForm Model="@newStudent" OnValidSubmit="HandleStudentSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div>
+            <label>Imię:</label>
+            <InputText @bind-Value="newStudent.FirstName" class="form-control" />
+        </div>
+        <div>
+            <label>Nazwisko:</label>
+            <InputText @bind-Value="newStudent.LastName" class="form-control" />
+        </div>
+        <div>
+            <label>PESEL:</label>
+            <InputText @bind-Value="newStudent.NumerPesel" class="form-control" />
+        </div>
+        <div>
+            <label>Telefon:</label>
+            <InputText @bind-Value="newStudent.NumerTelefonu" class="form-control" />
+        </div>
+        <div>
+            <label>Adres zamieszkania:</label>
+            <InputText @bind-Value="newStudent.AdresZamieszkania" class="form-control" />
+        </div>
+        <div>
+            <label>Klasa:</label>
+            <InputSelect @bind-Value="newStudent.ClassId" class="form-control">
+                <option value="">-- wybierz klasę --</option>
+                @foreach (var c in classes)
+                {
+                    <option value="@c.Id">@c.Name</option>
+                }
+            </InputSelect>
+        </div>
+
+        <br />
+        <button type="submit" class="btn btn-primary">Zapisz studenta</button>
+    </EditForm>
+}
+else if (val == 2)
+{
+    <h4>Formularz nauczyciela</h4>
+    <EditForm Model="@newTeacher" OnValidSubmit="HandleTeacherSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div>
+            <label>Imię:</label>
+            <InputText @bind-Value="newTeacher.FirstName" class="form-control" />
+        </div>
+        <div>
+            <label>Nazwisko:</label>
+            <InputText @bind-Value="newTeacher.LastName" class="form-control" />
+        </div>
+        <div>
+            <label>PESEL:</label>
+            <InputText @bind-Value="newTeacher.NumerPesel" class="form-control" />
+        </div>
+        <div>
+            <label>Telefon:</label>
+            <InputText @bind-Value="newTeacher.NumerTelefonu" class="form-control" />
+        </div>
+        <div>
+            <label>Adres zamieszkania:</label>
+            <InputText @bind-Value="newTeacher.AdresZamieszkania" class="form-control" />
+        </div>
+
+        <br />
+        <button type="submit" class="btn btn-primary">Zapisz nauczyciela</button>
+    </EditForm>
+}
+
+@code {
+    private int val = 1;
+    private Student newStudent = new();
+    private Teacher newTeacher = new();
+    private List<Class> classes = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        classes = await _context.Classes.ToListAsync();
+    }
+
+    private async Task HandleStudentSubmit()
+    {
+        Random rnd = new Random();
+
+        var user = new User
+        {
+            Password = RandomPass(15), // Możesz dodać hashowanie i formularz do hasła
+            AccessLevel = 0 // Student
+        };
+        int loginId = ((Int32.Parse(newStudent.NumerPesel.Substring(0,6)) + user.Id) * rnd.Next(23, 437)) / rnd.Next(1, 4);
+
+
+        user.Login = $"{newStudent.FirstName.Substring(0, 3)}_{newStudent.LastName.Substring(0, 3)}{loginId.ToString().Substring(0,4)}";
+
+        _context.Users.Add(user);
+        await _context.SaveChangesAsync();
+
+        newStudent.UserId = user.Id;
+        _context.Students.Add(newStudent);
+        await _context.SaveChangesAsync();
+
+        newStudent = new();
+		NavigationManager.NavigateTo("/AddStudent");
+    }
+
+    private async Task HandleTeacherSubmit()
+    {
+        var user = new User
+        {
+            Login = $"{newTeacher.FirstName.ToLower()}.{newTeacher.LastName.ToLower()}",
+            Password = RandomPass(15), // Możesz dodać hashowanie i formularz do hasła
+            AccessLevel = 1 // Teacher
+        };
+
+        _context.Users.Add(user);
+        await _context.SaveChangesAsync();
+
+        newTeacher.UserId = user.Id;
+        _context.Teachers.Add(newTeacher);
+        await _context.SaveChangesAsync();
+
+        newTeacher = new();
+        StateHasChanged();
+    }
+
+}

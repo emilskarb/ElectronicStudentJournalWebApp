@@ -1,0 +1,136 @@
+﻿@page "/Students"
+@using Microsoft.AspNetCore.Mvc.RazorPages;
+@using Microsoft.EntityFrameworkCore;
+@using ElectronicStudentJournal.Models;
+@inject ApplicationDbContext _context
+
+<td>
+    <label for="wybor">Wybierz liste:</label>
+    <InputSelect id="wybor" @bind-Value="View">
+        <option value="1">Student</option>
+        <option value="2">Teacher</option>
+    </InputSelect>
+</td>
+
+@if (students == null||teachers == null) 
+{
+    <p><em>Ładowanie danych...</em></p>
+}
+else
+{
+    switch(View){
+        case 1:
+            <h2>Lista uczniów</h2>
+<table border="1" cellpadding="8" cellspacing="0" style="width: 100%; border-collapse: collapse;">
+    <thead style="background-color: #a3c2b9;">
+        <tr>
+            <th>ID</th>
+            <th>Imię</th>
+            <th>Nazwisko</th>
+            <th>PESEL</th>
+            <th>Telefon</th>
+            <th>Adres</th>
+            <th>Usuń</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var student in students)
+        {
+            <tr>
+                <td>@student.Id</td>
+                <td>@student.FirstName</td>
+                <td>@student.LastName</td>
+                <td>@student.NumerPesel</td>
+                <td>@student.NumerTelefonu</td>
+                <td>@student.AdresZamieszkania</td>
+                <td>
+                    <button @onclick="()=>DeleteStudent(student)">Usuń</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+            </table>
+            break;
+        case 2:
+            <h2>Lista nauczycieli</h2>
+            <table border="1" cellpadding="8" cellspacing="0" style="width: 100%; border-collapse: collapse;">
+                <thead style="background-color: #a3c2b9;">
+                    <tr>
+                        <th>ID</th>
+                        <th>Imię</th>
+                        <th>Nazwisko</th>
+                        <th>PESEL</th>
+                        <th>Telefon</th>
+                        <th>Adres</th>
+                        <th>Usuń</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var teacher in teachers)
+                    {
+                        <tr>
+                            <td>@teacher.Id</td>
+                            <td>@teacher.FirstName</td>
+                            <td>@teacher.LastName</td>
+                            <td>@teacher.NumerPesel</td>
+                            <td>@teacher.NumerTelefonu</td>
+                            <td>@teacher.AdresZamieszkania</td>
+                            <td>
+                                <button @onclick="() => DeleteTeacher(teacher)">Usuń</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            break;
+    
+}
+@code {
+    private List<Student>? students;
+    private List<Teacher>? teachers;
+    private List<User>? users;
+    int View = 1;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        students = await _context.Students.ToListAsync();
+        teachers = await _context.Teachers.ToListAsync();
+        users = await _context.Users.ToListAsync();
+    }
+    private async Task DeleteTeacher(Teacher teacher1)
+    {
+        var teacher = await _context.Teachers.FindAsync(teacher1.Id);
+        var user = await _context.Users.FindAsync(teacher1.UserId);
+
+        if (teacher != null && user != null)
+        {
+            _context.Teachers.Remove(teacher);
+            _context.Users.Remove(user);
+            await _context.SaveChangesAsync();
+
+            // Odśwież listę po usunięciu
+            teachers = await _context.Teachers.ToListAsync();
+            users = await _context.Users.ToListAsync();
+            StateHasChanged();
+        }
+    }
+    private async Task DeleteStudent(Student student1)
+    {
+            var student = await _context.Students.FindAsync(student1.Id);
+            var user = await _context.Users.FindAsync(student1.UserId);
+
+            if (student != null && user!=null)
+            {
+                _context.Students.Remove(student);
+                _context.Users.Remove(user);
+                await _context.SaveChangesAsync();
+
+                // Odśwież listę po usunięciu
+                students = await _context.Students.ToListAsync();
+                users = await _context.Users.ToListAsync();
+                StateHasChanged();
+            }
+        }
+    }
+}

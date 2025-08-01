@@ -1,0 +1,22 @@
+﻿@page "/logout"
+@inject NavigationManager NavigationManager
+@inject IHttpContextAccessor HttpContextAccessor
+
+<div>
+    <h3>Logout</h3>
+    <p>You have been logged out successfully.</p>
+    <a href="/">Return to Home</a>
+</div>
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+
+        var context = HttpContextAccessor.HttpContext;
+        if (context != null)
+        {
+            NavigationManager.NavigateTo("/Logout", true); // domyślny logout Identity
+        }
+        NavigationManager.NavigateTo("/", true); // domyślny logout Identity
+    }
+}

@@ -1,0 +1,75 @@
+﻿@page "/GradesAdmin"
+@using Microsoft.AspNetCore.Mvc.RazorPages;
+@using Microsoft.EntityFrameworkCore;
+@using ElectronicStudentJournal.Models;
+@inject ApplicationDbContext _context
+@attribute [Authorize(Roles = "Admin,Teacher")]
+
+@if (students == null || subjects == null)
+{
+    <p><em>Ładowanie danych...</em></p>
+}
+else{
+{
+    <td>
+        
+        <label for="wyborStudent">Wybierz Ucznia:</label>
+        <InputSelect id="wyborStudent" @bind-Value="idStudenta" class="form-control">
+            @foreach (var stud in students)
+            {
+                <option value="@stud.Id">@stud.FirstName @stud.LastName</option>
+            }
+        </InputSelect>
+</td>
+}
+
+
+
+@if (students == null || subjects == null|| grades==null)
+{
+    <p><em>Ładowanie danych...</em></p>
+}
+else
+{
+            <h2>Lista uczniów</h2>
+            <table border="1" cellpadding="8" cellspacing="0" style="width: 100%; border-collapse: collapse;">
+                <thead style="background-color: #a3c2b9;">
+                    <tr>
+                        <th>Przedmiot</th>
+                        <th>Oceny</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var sub in subjects)
+                    {
+                        <tr>
+                            <td>@sub.Name</td>
+                            <td>
+                            @foreach (var grade in grades.Where(g => g.TeachingAssignment.SubjectId == sub.Id && g.Student.Id==idStudenta))
+                            {
+                                <span>@grade.Value&nbsp;&nbsp;</span>
+                            }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+        </table>
+    }
+}
+@code {
+    private List<Student>? students;
+    private List<Subject>? subjects;
+    private List<Grade>? grades;
+    int idStudenta = 0;
+
+    protected override async Task OnInitializedAsync()
+    {
+        students = await _context.Students.ToListAsync();
+        subjects = await _context.Subjects.ToListAsync();
+        grades = await _context.Grades
+            .Include(g => g.TeachingAssignment)
+            .ThenInclude(t => t.Subject)
+            .Include(g => g.Student)
+            .ToListAsync();
+    }
+}

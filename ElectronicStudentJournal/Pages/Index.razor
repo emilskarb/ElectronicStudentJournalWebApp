@@ -2,8 +2,17 @@
 
 <PageTitle>Index</PageTitle>
 
-<h1>Hello, world!</h1>
+<div class="row">
+	<div class="col-12">
+		<h2 class="fw-border">Welcome</h2>
+		<AuthorizeView Roles="Admin">
+			<p>Jesteś adminem</p>
+		</AuthorizeView>
 
-Welcome to your new app.
+		<AuthorizeView Roles="Teacher,Student">
+			<p>Jesteś nie adminem</p>
+			<p>Jesteś zalogowany jako @context.User.Identity.Name </p>
+		</AuthorizeView>
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+	</div>
+</div>

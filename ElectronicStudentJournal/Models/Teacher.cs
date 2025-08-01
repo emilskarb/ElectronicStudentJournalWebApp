@@ -1,6 +1,6 @@
 ﻿namespace ElectronicStudentJournal.Models
 {
-    public class Student
+    public class Teacher
     {
         public int Id { get; set; }
 
@@ -11,13 +11,8 @@
         public string NumerTelefonu { get; set; }
         public string AdresZamieszkania { get; set; }
 
-        public int ClassId { get; set; }
-        public Class Class { get; set; }
-
-
         public int UserId { get; set; }
         public User User { get; set; }
-
-        public List<Grade> Grades { get; set; } = new();
+        public List<TeachingAssignment> TeachingAssignments { get; set; } = new();
     }
 }

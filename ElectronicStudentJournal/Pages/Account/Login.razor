@@ -1,0 +1,72 @@
+﻿@page "/Login"
+
+@using ElectronicStudentJournal.Models.ViewModels
+@using ElectronicStudentJournal.Models
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Authentication
+@using Microsoft.AspNetCore.Authentication.Cookies
+@inject ApplicationDbContext _context
+@inject NavigationManager NavigationManager
+@inject IHttpContextAccessor HttpContextAccessor
+@inject AuthenticationStateProvider AuthProvider
+
+<div class="row">
+    <div class="col-md-6 offset-md-3">
+        <h3>Logowanie</h3>
+        <EditForm Model="@Model" OnValidSubmit="Authenticate">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <div class="form-group">
+                <label for="login">Login:</label>
+                <InputText id="login" @bind-Value="Model.Login" class="form-control" placeholder="Login" />
+            </div>
+            <div class="form-group">
+                <label for="password">Hasło:</label>
+                <InputText id="password" type="password" @bind-Value="Model.Password" class="form-control" placeholder="Password" />
+            </div>
+            <button type="submit" class="btn btn-primary">Zaloguj</button>
+
+            @if (!string.IsNullOrEmpty(ErrorMessage))
+            {
+                <div class="alert alert-danger mt-2">@ErrorMessage</div>
+            }
+        </EditForm>
+        </div>
+
+    </div>
+
+@code {
+    public LoginViewModel Model { get; set; } = new();
+    private string ErrorMessage;
+    string level;
+    private async Task Authenticate()
+    {
+        var userAccount = _context.Users.FirstOrDefault(x => x.Login == Model.Login);
+
+        if (userAccount is null || userAccount.Password != Model.Password)
+        {
+            ErrorMessage = "Nieprawidłowy login lub hasło.";
+            return;
+        }
+        var role = ((UserAccessLevel)userAccount.AccessLevel).ToString(); // Zakładamy enum
+
+        var customAuthProvider = (CustomAuthenticationStateProvider)AuthProvider;
+        switch(userAccount.AccessLevel)
+        {
+            case (int)UserAccessLevel.Student:
+                level = "Student";
+                break;
+            case (int)UserAccessLevel.Teacher:
+                level = "Teacher";
+                break;
+            case (int)UserAccessLevel.Admin:
+                level = "Admin";
+                break;
+            default:
+                ErrorMessage = "Nieznany poziom dostępu.";
+                return;
+        }
+        customAuthProvider.MarkUserAsAuthenticated(userAccount.Login, level, userAccount.Id);
+        NavigationManager.NavigateTo("/");
+    }
+}

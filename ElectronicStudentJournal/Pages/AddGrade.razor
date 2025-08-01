@@ -1,0 +1,141 @@
+﻿@page "/AddGrade"
+@using Microsoft.AspNetCore.Mvc.RazorPages;
+@using Microsoft.EntityFrameworkCore;
+@using ElectronicStudentJournal.Models;
+@inject ApplicationDbContext _context
+@inject NavigationManager NavigationManager
+@attribute [Authorize(Roles = "Teacher,Admin")]
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+
+@if (students == null || classes == null||subjects==null||grades==null)
+{
+    <p><em>Ładowanie danych...</em></p>
+}
+else{
+        <td>
+            <label for="ClassChoice">Wybierz klase:</label>
+        <InputSelect id="ClassChoice" @bind-Value="classId">
+            <option value=0>---------</option>
+                @foreach (var klasa in classes)
+                {
+                    <option value=@klasa.Id>@klasa.Name</option>
+                }
+            </InputSelect>
+            @if(classId!=0){
+                <label for="StudentChoice">Wybierz ucznia:</label>
+            <InputSelect id="StudentChoice" @bind-Value="studentId">
+                <option value=0>---------</option>
+                @foreach (var student in students.Where(s => s.ClassId == classId))
+                {
+                    <option value=@student.Id>@student.FirstName @student.LastName</option>
+                }
+                </InputSelect>
+        }
+        @if(studentId!=0){   
+        <label for="SubjectChoice">Wybierz przedmiot:</label>
+            <InputSelect id="SubjectChoice" @bind-Value="subjectId">
+                <option value=0>---------</option>
+                @foreach (var subject in subjects.Where(s =>
+                        s.TeachingAssignments.Any(t =>
+                        t.ClassId == classId &&
+                        t.Class.Students.Any(st => st.Id == studentId))))
+            {
+                <option value=@subject.Id>@subject.Name</option>
+            }
+            </InputSelect>
+        }
+    </td>
+    @if (studentId != 0 && classId != 0)
+    {
+        <h4>Nowa Ocena</h4>
+        <EditForm Model="@newGrade" OnValidSubmit="HandleGradeSubmit">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            <div>
+                <label>Ocena:</label>
+                <InputText @bind-Value="ValueOceny" class="form-control" />
+            </div>
+            <div>
+                <label>Opis:</label>
+                <InputText @bind-Value="OpisOceny" class="form-control" />
+            </div>
+            <br />
+            <button type="submit" class="btn btn-primary">Zapisz studenta</button>
+            @if (!string.IsNullOrEmpty(ErrorMessage))
+            {
+                <div class="alert alert-danger mt-2">@ErrorMessage</div>
+            }
+        </EditForm>
+    }
+    @if (classId == 0)
+    {
+        studentId = 0;
+		subjectId = 0;
+    }
+    @if (studentId == 0)
+    {
+        subjectId = 0;
+    }
+}
+@code {
+    int classId = 0;
+    int studentId = 0;
+    int subjectId = 0;
+    string OpisOceny;
+    string ValueOceny;
+    private string ErrorMessage;
+
+    private List<Student>? students;
+    private List<Subject>? subjects;
+    private List<Grade>? grades;
+    private List<Class>? classes;
+    private Grade newGrade = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        students = await _context.Students.ToListAsync();
+        classes = await _context.Classes.ToListAsync();
+        subjects = await _context.Subjects
+        .Include(s => s.TeachingAssignments).
+        ThenInclude(t=>t.Class).
+        ThenInclude(c=>c.Students)
+        .ToListAsync();
+
+
+        grades = await _context.Grades
+            .Include(g => g.TeachingAssignment)
+            .ThenInclude(t => t.Subject)
+            .Include(g => g.Student)
+            .ToListAsync();
+    }
+    private async Task HandleGradeSubmit()
+    {
+        var assignment = await _context.TeachingAssignments
+       .FirstOrDefaultAsync(t => t.SubjectId == subjectId && t.ClassId == classId);
+
+        if (assignment != null)
+        {
+            newGrade.StudentId = studentId;
+            newGrade.TeachingAssignmentId = assignment.Id;
+            try
+            {
+                newGrade.Value = Int32.Parse(ValueOceny);
+            }
+            catch
+            {
+                ErrorMessage = "Zła wpisana wartość oceny";
+                return;
+            }
+            newGrade.Description = OpisOceny;
+			newGrade.Date = DateTime.Now;
+            ErrorMessage = string.Empty;
+            _context.Grades.Add(newGrade);
+            await _context.SaveChangesAsync();
+
+            newGrade = new();
+            StateHasChanged();
+        }
+    }
+}
