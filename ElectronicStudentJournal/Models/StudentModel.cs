@@ -1,9 +1,10 @@
 ﻿using ElectronicStudentJournal.Data;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ElectronicStudentJournal.Models;
 
-public record StudentModel
+public class StudentModel
 {
     public int StudentId { get; set; }
 
@@ -30,13 +31,16 @@ public record StudentModel
     [DataType(DataType.Date)]
     public DateTime BirthDate { get; set; }
 
+    [NotMapped]
+    public string FormattedBirthDate => BirthDate.ToShortDateString();
+
     [RegularExpression(@"^[0-9]+$", ErrorMessage = "Można używać tylko cyfr")]
     public string PhoneNumber { get; set; }
 
     [Required(ErrorMessage = "Proszę podać adres zamieszkania")]
     public string HomeAddress { get; set; }
 
-    public GradeRating Rating { get; set; }
+    //public GradeRating Rating { get; set; }
 
     //public Grade Grade { get; set; }
 }

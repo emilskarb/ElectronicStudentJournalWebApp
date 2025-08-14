@@ -58,7 +58,7 @@ namespace ElectronicStudentJournal.Migrations
 
                     b.HasKey("GradeId");
 
-                    b.ToTable("Grades");
+                    b.ToTable("Grades", (string)null);
                 });
 
             modelBuilder.Entity("ElectronicStudentJournal.Models.Student", b =>

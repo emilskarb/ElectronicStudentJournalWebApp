@@ -17,6 +17,7 @@ namespace ElectronicStudentJournal.Data
             StudentEntityBuilder.Property(p => p.FirstName).HasMaxLength(30).IsRequired(true);
             StudentEntityBuilder.Property(p => p.LastName).HasMaxLength(30).IsRequired(true);
             StudentEntityBuilder.Property(p => p.PhoneNumber).HasMaxLength(11).IsRequired(false);
+            StudentEntityBuilder.HasKey(p => p.StudentId);
         }
 
         public DbSet<StudentModel> Students { get; protected set; }   //kolekcja naszych struktur w bazie naych (odwoływanie do tabeli)

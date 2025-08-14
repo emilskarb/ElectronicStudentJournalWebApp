@@ -22,3 +22,28 @@ GO
 
 SELECT 'Wstawiono 15 rekordów do tabeli Students.' AS Status;
 GO
+
+
+--var list = new List<StudentModel>();
+--list.Add(new StudentModel() { StudentId = 1, FirstName = "John", LastName = "Doe", Age = 20, PeselNumber = "12345678901", BirthDate = new DateTime(2003, 1, 15), PhoneNumber = "123-456-789", HomeAddress = "123 Main St", Rating = GradeRating.A });
+--list.Add(new StudentModel() { StudentId = 2, FirstName = "Jane", LastName = "Smith", Age = 22, PeselNumber = "23456789012", BirthDate = new DateTime(2001, 2, 20), PhoneNumber = "234-567-890", HomeAddress = "234 Elm St", Rating = GradeRating.B });
+--list.Add(new StudentModel() { StudentId = 3, FirstName = "Alice", LastName = "Johnson", Age = 21, PeselNumber = "34567890123", BirthDate = new DateTime(2002, 3, 25), PhoneNumber = "345-678-901", HomeAddress = "345 Oak St", Rating = GradeRating.A });
+--list.Add(new StudentModel() { StudentId = 4, FirstName = "Bob", LastName = "Brown", Age = 23, PeselNumber = "45678901234", BirthDate = new DateTime(2000, 4, 30), PhoneNumber = "456-789-012", HomeAddress = "456 Pine St", Rating = GradeRating.C });
+--list.Add(new StudentModel() { StudentId = 5, FirstName = "Charlie", LastName = "Davis", Age = 19, PeselNumber = "56789012345", BirthDate = new DateTime(2004, 5, 5), PhoneNumber = "567-890-123", HomeAddress = "567 Maple St", Rating = GradeRating.B });
+--list.Add(new StudentModel() { StudentId = 6, FirstName = "Diana", LastName = "Garcia", Age = 20, PeselNumber = "67890123456", BirthDate = new DateTime(2003, 6, 10), PhoneNumber = "678-901-234", HomeAddress = "678 Cedar St", Rating = GradeRating.A });
+--list.Add(new StudentModel() { StudentId = 7, FirstName = "Ethan", LastName = "Martinez", Age = 22, PeselNumber = "78901234567", BirthDate = new DateTime(2001, 7, 15), PhoneNumber = "789-012-345", HomeAddress = "789 Birch St", Rating = GradeRating.B });
+--list.Add(new StudentModel() { StudentId = 8, FirstName = "Fiona", LastName = "Hernandez", Age = 21, PeselNumber = "89012345678", BirthDate = new DateTime(2002, 8, 20), PhoneNumber = "890-123-456", HomeAddress = "890 Spruce St", Rating = GradeRating.C });
+--list.Add(new StudentModel() { StudentId = 9, FirstName = "George", LastName = "Lopez", Age = 23, PeselNumber = "90123456789", BirthDate = new DateTime(2000, 9, 25), PhoneNumber = "901-234-567", HomeAddress = "901 Fir St", Rating = GradeRating.A });
+--list.Add(new StudentModel() { StudentId = 10, FirstName = "Hannah", LastName = "Wilson", Age = 19, PeselNumber = "01234567890", BirthDate = new DateTime(2004, 10, 30), PhoneNumber = "012-345-678", HomeAddress = "012 Willow St", Rating = GradeRating.B });
+--list.Add(new StudentModel() { StudentId = 11, FirstName = "Ian", LastName = "Anderson", Age = 20, PeselNumber = "12345678901", BirthDate = new DateTime(2003, 11, 5), PhoneNumber = "123-456-789", HomeAddress = "123 Chestnut St", Rating = GradeRating.A });
+--list.Add(new StudentModel() { StudentId = 12, FirstName = "Julia", LastName = "Thomas", Age = 22, PeselNumber = "23456789012", BirthDate = new DateTime(2001, 12, 10), PhoneNumber = "234-567-890", HomeAddress = "234 Ash St", Rating = GradeRating.B });
+--list.Add(new StudentModel() { StudentId = 13, FirstName = "Kevin", LastName = "Jackson", Age = 21, PeselNumber = "34567890123", BirthDate = new DateTime(2002, 1, 15), PhoneNumber = "345-678-901", HomeAddress = "345 Poplar St", Rating = GradeRating.C });
+--list.Add(new StudentModel() { StudentId = 14, FirstName = "Laura", LastName = "White", Age = 23, PeselNumber = "45678901234", BirthDate = new DateTime(2000, 2, 20), PhoneNumber = "456-789-012", HomeAddress = "456 Walnut St", Rating = GradeRating.A });
+--list.Add(new StudentModel() { StudentId = 15, FirstName = "Michael", LastName = "Harris", Age = 19, PeselNumber = "56789012345", BirthDate = new DateTime(2004, 3, 25), PhoneNumber = "567-890-123", HomeAddress = "567 Cherry St", Rating = GradeRating.B });
+--list.Add(new StudentModel() { StudentId = 16, FirstName = "Nina", LastName = "Martin", Age = 20, PeselNumber = "67890123456", BirthDate = new DateTime(2003, 4, 30), PhoneNumber = "678-901-234", HomeAddress = "678 Peach St", Rating = GradeRating.A });
+--list.Add(new StudentModel() { StudentId = 17, FirstName = "Oscar", LastName = "Thompson", Age = 22, PeselNumber = "78901234567", BirthDate = new DateTime(2001, 5, 5), PhoneNumber = "789-012-345", HomeAddress = "789 Plum St", Rating = GradeRating.B });
+--list.Add(new StudentModel() { StudentId = 18, FirstName = "Paula", LastName = "Garcia", Age = 21, PeselNumber = "89012345678", BirthDate = new DateTime(2002, 6, 10), PhoneNumber = "890-123-456", HomeAddress = "890 Apricot St", Rating = GradeRating.C });
+--list.Add(new StudentModel() { StudentId = 19, FirstName = "Quinn", LastName = "Martinez", Age = 23, PeselNumber = "90123456789", BirthDate = new DateTime(2000, 7, 15), PhoneNumber = "901-234-567", HomeAddress = "901 Nectarine St", Rating = GradeRating.A });
+--list.Add(new StudentModel() { StudentId = 20, FirstName = "Rachel", LastName = "Lopez", Age = 19, PeselNumber = "01234567890", BirthDate = new DateTime(2004, 8, 20), PhoneNumber = "012-345-678", HomeAddress = "012 Tangerine St", Rating = GradeRating.B });
+
+--connection.BulkInsert(list);

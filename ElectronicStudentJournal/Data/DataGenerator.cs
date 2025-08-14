@@ -43,9 +43,8 @@ public class DataGenerator
                      u.PeselNumber = f.Person.Pesel();
                      u.BirthDate = f.Date.Between(new DateTime(1980, 01, 01), new DateTime(2025, 05, 25));
                      u.PhoneNumber = f.Random.Replace("### ### ###");
-                     u.PhoneNumber = f.Phone.PhoneNumberFormat();
                      u.HomeAddress = f.PickRandomParam(zbiorTestowy);
-                     u.Rating = f.PickRandom<GradeRating>();
+                     //u.Rating = f.PickRandom<GradeRating>();
                 });
     }
 

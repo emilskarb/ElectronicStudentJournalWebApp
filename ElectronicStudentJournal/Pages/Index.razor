@@ -1,4 +1,5 @@
 ﻿@page "/"
+@inject Blazored.LocalStorage.ILocalStorageService LocalStorage
 
 <PageTitle>Strona główna</PageTitle>
 
@@ -9,16 +10,31 @@
             <p>Zobacz swoje postępy w nauce</p>
         </NavLink>
         <NavLink href="personaldata" class="tile">
-            <h2>Twoje Dane</h2>
+            <h2 class="text-3xl font-bold underline text-red-600">Twoje Dane</h2>
             <p>Sprawdź i zaktualizuj swoje informacje</p>
         </NavLink>
-        <NavLink href="planzajec" class="tile">
+        <NavLink href="classtimetable" class="tile">
             <h2>Plan Zajęć</h2>
             <p>Sprawdź harmonogram lekcji</p>
         </NavLink>
-        <NavLink href="wiadomosci" class="tile">
+        <NavLink href="messages" class="tile">
             <h2>Wiadomości</h2>
             <p>Skontaktuj się z nauczycielami</p>
         </NavLink>
     </div>
 </div>
+
+<h1>@message</h1>
+
+@code {
+    private string message = "";
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await LocalStorage.SetItemAsStringAsync("message", "Hello World!");
+            message = await LocalStorage.GetItemAsStringAsync("message");
+            StateHasChanged();
+        }
+    }
+}

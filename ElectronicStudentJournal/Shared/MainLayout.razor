@@ -1,17 +1,16 @@
 ﻿@inherits LayoutComponentBase
+@inject Blazored.LocalStorage.ILocalStorageService LocalStorage
 
 <div class="page">
 
-    <!-- GÓRNY PASEK NAWIGACYJNY (HEADER) -->
     <header class="top-navbar">
         <nav class="navbar-container">
-            <!-- Lewa strona paska -->
+
             <div class="navbar-left">
                 <img src="https://penji.co/wp-content/uploads/2022/08/1.-centreville-layton-school-logo.jpg.webp" alt="Logo Szkoły" class="logo">
                 <a href="/" class="navbar-title">Dziennik Elektroniczny</a>
             </div>
 
-            <!-- Prawa strona paska -->
             <div class="navbar-right">
                 <div class="user-info-item">
                     <span>Szczęśliwy numerek</span>
@@ -29,15 +28,66 @@
                 </button>
             </div>
         </nav>
+
+
+        <div>
+            <h1>Theming Demo</h1>
+        </div>
+
+        <div>
+            <button type="button" >
+                Toggle Dark/Light Mode
+            </button>
+        </div>
     </header>
 
-    <!-- GŁÓWNA TREŚĆ STRONY -->
-    <main role="main" class="main-content">
+    @*<main role="main" class="main-content">*@
+    <main role="main" class= '@(toggleDark ? "dark" : null)'>
         @Body
     </main>
 
-    <!-- Stopka -->
     <footer class="footer">
-        &copy; 2024 - Dziennik Elektroniczny
+        &copy; 2025 - Dziennik Elektroniczny
     </footer>
 </div>
+
+
+@code {
+    private bool toggleDark = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!(await LocalStorage.ContainKeyAsync("theme")))
+        {
+            await LocalStorage.SetItemAsStringAsync("theme", "light");
+        }
+        else
+        {
+            string theme = await LocalStorage.GetItemAsStringAsync("theme");
+
+            if (theme == "dark")
+            {
+                toggleDark = true;
+            }
+            else
+            {
+                toggleDark = false;
+            }
+        }
+    }
+
+    private async Task ChangeTheme()
+    {
+        toggleDark = !toggleDark;
+        string theme = await LocalStorage.GetItemAsStringAsync("theme");
+
+        if (theme == "dark")
+        {
+            await LocalStorage.SetItemAsStringAsync("theme", "light");
+        }
+        else
+        {
+            await LocalStorage.SetItemAsStringAsync("theme", "dark");
+        }
+    }
+}

@@ -1,3 +1,4 @@
+using Blazored.LocalStorage;
 using ElectronicStudentJournal.Data;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
@@ -19,6 +20,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 });
 
 builder.Services.AddTransient<DataGenerator>();
+
+builder.Services.AddBlazoredLocalStorage();
 
 var app = builder.Build();
 

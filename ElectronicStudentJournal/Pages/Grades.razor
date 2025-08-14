@@ -1,52 +1,68 @@
 ﻿@page "/gradez"
 @inject DataGenerator generejtor
+@inject ApplicationDbContext DbContext
 @using ElectronicStudentJournal.Models;
 @using ElectronicStudentJournal.Data;
+@using Microsoft.EntityFrameworkCore;
 
 <h3>Grades</h3>
 
 <h2>witamy w ocenach</h2>
+<p class="text-3xl font-bold underline text-red-600">test test</p>
+<p class="underline decoration-indigo-500">test test</p>
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Id</th>
-            <th>Imie</th>
-            <th>Nazwisko</th>
-            <th>Wiek</th>
-            <th>Numer pesel</th>
-            <th>Data urodzenia</th>
-            <th>Numer telefonu</th>
-            <th>Adres zamieszkania</th>
-            <th>Ocena</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var stud in ListaUczniow)
-        {
+
+@if (ListaUczniow == null){
+    <p>Nie ma danych</p>
+}
+else {
+    <table class="table table-striped">
+        <thead>
             <tr>
-                <td>@stud.StudentId</td>
-                <td>@stud.FirstName</td>
-                <td>@stud.LastName</td>
-                <td>@stud.Age</td>
-                <td>@stud.PeselNumber</td>
-                <td>@stud.BirthDate</td>
-                <td>@stud.PhoneNumber</td>
-                <td>@stud.HomeAddress</td>
-                <td>@stud.Rating</td>
+                <th>Id</th>
+                <th>Imie</th>
+                <th>Nazwisko</th>
+                <th>Wiek</th>
+                <th>Numer pesel</th>
+                <th>Data urodzenia</th>
+                <th>Numer telefonu</th>
+                <th>Adres zamieszkania</th>
+                <th>Ocena</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var stud in ListaUczniow)
+            {
+                <tr>
+                    <td>@stud.StudentId</td>
+                    <td>@stud.FirstName</td>
+                    <td>@stud.LastName</td>
+                    <td>@stud.Age</td>
+                    <td>@stud.PeselNumber</td>
+                    <td>@stud.BirthDate.ToShortDateString()</td>
+                    <td>@stud.PhoneNumber</td>
+                    <td>@stud.HomeAddress</td>
+                    @*<td>@stud.Rating</td>*@
+                </tr>
+            }
+        </tbody>
+    </table>
+}
 
-<button type="button" class="btn btn-outline-primary" @onclick="WczytajUczniow">Dodaj ucznia</button>
+@*<button type="button" class="btn btn-outline-primary" @onclick="WczytajUczniow">Dodaj ucznia</button>*@
 
 @code {
-    List<StudentModel> ListaUczniow = new();
+    private List<StudentModel> ListaUczniow = new();
 
-    public void WczytajUczniow()
-    {
-        var results = generejtor.GenerateManyStudents().Take(10);
-        ListaUczniow.AddRange(results);
-    }
+    //protected override async Task OnInitializedAsync()
+    //{
+    //    try
+    //    {
+    //        ListaUczniow = await DbContext.Students.ToListAsync();
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        Console.WriteLine($"Wystąpił błąd podczas ładowania danych: {ex.Message}");
+    //    }
+    //}
 }
