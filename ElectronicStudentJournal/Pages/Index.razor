@@ -4,13 +4,13 @@
 <PageTitle>Strona główna</PageTitle>
 
 <div class="content-container">
-    <div class="tile-grid">
+    <div class="tile-grid ">
         <NavLink href="gradez" class="tile">
             <h2>Oceny</h2>
             <p>Zobacz swoje postępy w nauce</p>
         </NavLink>
         <NavLink href="personaldata" class="tile">
-            <h2 class="text-3xl font-bold underline text-red-600">Twoje Dane</h2>
+            <h2>Twoje Dane</h2>
             <p>Sprawdź i zaktualizuj swoje informacje</p>
         </NavLink>
         <NavLink href="classtimetable" class="tile">
@@ -23,6 +23,18 @@
         </NavLink>
     </div>
 </div>
+
+@*<button class="btn btn-primary" @onclick="ChangeTheme">zmień tryb</button>
+
+@code{
+    private async void ChangeTheme()
+    {
+        
+    }
+}
+*@
+
+
 
 <h1>@message</h1>
 

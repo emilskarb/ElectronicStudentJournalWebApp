@@ -5,64 +5,63 @@
 @using ElectronicStudentJournal.Data;
 @using Microsoft.EntityFrameworkCore;
 
-<h3>Grades</h3>
-
-<h2>witamy w ocenach</h2>
-<p class="text-3xl font-bold underline text-red-600">test test</p>
-<p class="underline decoration-indigo-500">test test</p>
-
+@*<label class="inline-flex items-center me-5 cursor-pointer">
+    <input type="checkbox" value="" class="sr-only peer" checked>
+    <div class="relative w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-red-300 dark:peer-focus:ring-red-800 dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-red-600 dark:peer-checked:bg-red-600"></div>
+    <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Red</span>
+</label>*@
 
 @if (ListaUczniow == null){
     <p>Nie ma danych</p>
 }
 else {
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Imie</th>
-                <th>Nazwisko</th>
-                <th>Wiek</th>
-                <th>Numer pesel</th>
-                <th>Data urodzenia</th>
-                <th>Numer telefonu</th>
-                <th>Adres zamieszkania</th>
-                <th>Ocena</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var stud in ListaUczniow)
-            {
+    <div class="flex flex-col place-content-center border-2 pt-32 border-amber-600 bg-sky-200 dark:bg-[#232141] min-w-screen min-h-screen space-y-5 gap-y-5 place-items-center">
+        <table class="table-fixed place-self-center-safe border border-yellow-300 border-separate rounded-2xl  w-4/5 h-4/5 bg-cyan-200 sticky dark:bg-[#3a407ce5] dark:text-blue-100 text-black whitespace-nowrap">
+            <thead>
                 <tr>
-                    <td>@stud.StudentId</td>
-                    <td>@stud.FirstName</td>
-                    <td>@stud.LastName</td>
-                    <td>@stud.Age</td>
-                    <td>@stud.PeselNumber</td>
-                    <td>@stud.BirthDate.ToShortDateString()</td>
-                    <td>@stud.PhoneNumber</td>
-                    <td>@stud.HomeAddress</td>
-                    @*<td>@stud.Rating</td>*@
+                    <th class="table-th rounded-tl-2xl">Id</th>
+                    <th class="table-th">Imie</th>
+                    <th class="table-th">Nazwisko</th>
+                    <th class="table-th">Wiek</th>
+                    <th class="table-th">Numer pesel</th>
+                    <th class="table-th">Data urodzenia</th>
+                    <th class="table-th">Numer telefonu</th>
+                    <th class="table-th rounded-tr-2xl">Adres zamieszkania</th>
+                    @*<th>Ocena</th>*@
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var stud in ListaUczniow)
+                {
+                    <tr>
+                        <td class="table-td-bottom-left">@stud.StudentId</td>
+                        <td class="table-td">@stud.FirstName</td>
+                        <td class="table-td">@stud.LastName</td>
+                        <td class="table-td">@stud.Age</td>
+                        <td class="table-td">@stud.PeselNumber</td>
+                        <td class="table-td">@stud.FormattedBirthDate</td>
+                        <td class="table-td">@stud.PhoneNumber</td>
+                        <td class="table-td-bottom-right">@stud.HomeAddress</td>
+                        @*<td>@stud.Rating</td>*@
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 }
-
-@*<button type="button" class="btn btn-outline-primary" @onclick="WczytajUczniow">Dodaj ucznia</button>*@
 
 @code {
     private List<StudentModel> ListaUczniow = new();
 
-    //protected override async Task OnInitializedAsync()
-    //{
-    //    try
-    //    {
-    //        ListaUczniow = await DbContext.Students.ToListAsync();
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        Console.WriteLine($"Wystąpił błąd podczas ładowania danych: {ex.Message}");
-    //    }
-    //}
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            ListaUczniow = await DbContext.Students.ToListAsync();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Wystąpił błąd podczas ładowania danych: {ex.Message}");
+        }
+    }
 }

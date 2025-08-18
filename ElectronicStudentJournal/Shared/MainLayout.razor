@@ -1,5 +1,6 @@
 ﻿@inherits LayoutComponentBase
 @inject Blazored.LocalStorage.ILocalStorageService LocalStorage
+@inject IJSRuntime JS
 
 <div class="page">
 
@@ -29,7 +30,7 @@
             </div>
         </nav>
 
-
+@*
         <div>
             <h1>Theming Demo</h1>
         </div>
@@ -39,10 +40,11 @@
                 Toggle Dark/Light Mode
             </button>
         </div>
+*@
     </header>
-
-    @*<main role="main" class="main-content">*@
-    <main role="main" class= '@(toggleDark ? "dark" : null)'>
+  
+    <main role="main" class="main-content">
+    @*<main role="main" class= '@(toggleDark ? "dark" : null)'>*@
         @Body
     </main>
 
@@ -51,43 +53,100 @@
     </footer>
 </div>
 
+@*
+<button @onclick="ToggleTheme"
+        class="p-2 rounded-lg transition-colors duration-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+        title="@(isDarkMode ? "Włącz jasny motyw" : "Włącz ciemny motyw")">
+    @if (isDarkMode)
+    {
+        <svg xmlns="http://www.w3.org/2000/svg"
+         class="h-6 w-6 text-yellow-400"
+         fill="none"
+         viewBox="0 0 24 24"
+         stroke="currentColor">
+            <path stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+        </svg>
+    }
+    else
+    {
+        <svg xmlns="http://www.w3.org/2000/svg"
+         class="h-6 w-6 text-gray-700"
+         fill="none"
+         viewBox="0 0 24 24"
+         stroke="currentColor">
+            <path stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+        </svg>
+    }
+</button>
 
 @code {
-    private bool toggleDark = false;
+    private bool isDarkMode = false;
+    private bool isFirstRender = true;
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (!(await LocalStorage.ContainKeyAsync("theme")))
+        if (firstRender)
         {
-            await LocalStorage.SetItemAsStringAsync("theme", "light");
-        }
-        else
-        {
-            string theme = await LocalStorage.GetItemAsStringAsync("theme");
+            // Pobierz zapisany motyw z LocalStorage
+            var savedTheme = await LocalStorage.GetItemAsStringAsync("theme");
 
-            if (theme == "dark")
+            // Jeśli nie ma zapisanego motywu, sprawdź preferencje systemowe
+            if (string.IsNullOrEmpty(savedTheme))
             {
-                toggleDark = true;
+                // Sprawdź preferencje systemowe użytkownika
+                var prefersDark = await JS.InvokeAsync<bool>(
+                    "window.matchMedia",
+                    "(prefers-color-scheme: dark)"
+                ).ContinueWith(t => t.Result);
+
+                isDarkMode = prefersDark;
+                savedTheme = prefersDark ? "dark" : "light";
+                await LocalStorage.SetItemAsStringAsync("theme", savedTheme);
             }
             else
             {
-                toggleDark = false;
+                isDarkMode = savedTheme == "dark";
+            }
+
+            // Zastosuj motyw
+            if (isDarkMode)
+            {
+                await JS.InvokeVoidAsync("document.documentElement.classList.add", "dark");
+            }
+            else
+            {
+                await JS.InvokeVoidAsync("document.documentElement.classList.remove", "dark");
+            }
+
+            isFirstRender = false;
+            StateHasChanged(); // Odśwież UI żeby pokazać właściwą ikonę
+        }
+    }
+
+    private async Task ToggleTheme()
+    {
+        // Przełącz tylko jeśli komponent jest już zainicjalizowany
+        if (!isFirstRender)
+        {
+            isDarkMode = !isDarkMode;
+
+            if (isDarkMode)
+            {
+                await LocalStorage.SetItemAsStringAsync("theme", "dark");
+                await JS.InvokeVoidAsync("document.documentElement.classList.add", "dark");
+            }
+            else
+            {
+                await LocalStorage.SetItemAsStringAsync("theme", "light");
+                await JS.InvokeVoidAsync("document.documentElement.classList.remove", "dark");
             }
         }
     }
-
-    private async Task ChangeTheme()
-    {
-        toggleDark = !toggleDark;
-        string theme = await LocalStorage.GetItemAsStringAsync("theme");
-
-        if (theme == "dark")
-        {
-            await LocalStorage.SetItemAsStringAsync("theme", "light");
-        }
-        else
-        {
-            await LocalStorage.SetItemAsStringAsync("theme", "dark");
-        }
-    }
 }
+*@

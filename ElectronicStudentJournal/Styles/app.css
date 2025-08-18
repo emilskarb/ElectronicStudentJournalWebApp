@@ -11,7 +11,6 @@
         font-family: 'Inter', sans-serif;
         @apply bg-[#C4F7E] text-gray-800;
         @apply dark:bg-[#232141] dark:text-blue-100;
-        color: #1f2937;
     }
 }
 
@@ -120,14 +119,14 @@
 
 .tile {
     display: block;
-    background-color: white;
     padding: 3rem;
     border-radius: 0.5rem;
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
     text-align: center;
     text-decoration: none;
-    color: inherit;
     transition: all 0.3s ease-in-out;
+    @apply bg-[#C4F7E];
+    @apply dark:bg-[#3a407ce5];
 }
 
     .tile:hover {
@@ -139,13 +138,15 @@
         margin: 0;
         font-size: 1.875rem;
         font-weight: 700;
-        color: #1f2937;
         transition: color 0.3s;
+        @apply text-gray-800;
+        @apply dark:text-blue-100;
     }
 
     .tile p {
         margin-top: 0.5rem;
-        color: #6b7280;
+        @apply text-gray-800;
+        @apply dark:text-blue-100;
     }
 
     .tile:hover h2 {

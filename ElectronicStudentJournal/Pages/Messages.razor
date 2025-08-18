@@ -2,6 +2,51 @@
 
 <h3>Messages</h3>
 
+
+<EditForm Model="StudentModel">
+    <input type="search" class="rounded-full text-white bg-blue-500 h-9 w-24 hover:bg-blue-400 motion-reduce:hidden min-w-max px-3 "
+           @bind-value="SearchStudentName" @bind-value:event="oninput" placeholder="Szukaj po imieniu" />
+</EditForm>
+
+
+@if (!StudentsList.Any())
+{
+    <p>nie ma</p>
+}
+else
+{
+    <table>
+        <thead>
+            <tr>
+                <td>imie</td>
+                <td>nazwisko</td>
+                <td>wiek</td>
+                <td>data urodzenia</td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var student in FilteredStudents)
+            {
+                <tr>
+                    <td>@student.FirstName</td>
+                    <td>@student.LastName</td>
+                    <td>@student.Age</td>
+                    <td>@student.FormattedBirthDate</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
 @code {
+    List<StudentModel> StudentsList = new();
+
+    StudentModel StudentModel = new StudentModel();
+
+    public string SearchStudentName = "";
+
+    List<StudentModel> FilteredStudents => StudentsList
+                                            .Where(student => student.FirstName.ToLower().Contains(SearchStudentName.ToLower())).ToList();
+
 
 }
