@@ -9,8 +9,7 @@
         margin: 0;
         padding: 0;
         font-family: 'Inter', sans-serif;
-        @apply bg-[#C4F7E] text-gray-800;
-        @apply dark:bg-[#232141] dark:text-blue-100;
+        @apply bg-sky-100 text-gray-800 dark:bg-[#232141] dark:text-blue-100;
     }
 }
 
@@ -21,7 +20,7 @@
 }
 
 .top-navbar {
-    background-color: white;
+    @apply bg-sky-100 text-gray-800 dark:bg-[#232141] dark:text-blue-100;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     position: sticky;
     top: 0;
@@ -53,7 +52,7 @@
 .navbar-title {
     font-size: 1.5rem;
     font-weight: 800;
-    color: #1f2937;
+    @apply text-gray-800 dark:text-blue-100;
     text-decoration: none;
 }
 
@@ -63,7 +62,7 @@
 
     .user-info-item span {
         font-size: 0.75rem;
-        color: #6b7280;
+        @apply text-gray-800 dark:text-blue-100;
     }
 
     .user-info-item p {
@@ -74,7 +73,7 @@
 .lucky-number {
     font-size: 1.125rem;
     font-weight: 700;
-    color: #4f46e5;
+    @apply text-gray-800 dark:text-blue-100;
 }
 
 .logout-button {
@@ -125,8 +124,7 @@
     text-align: center;
     text-decoration: none;
     transition: all 0.3s ease-in-out;
-    @apply bg-[#C4F7E];
-    @apply dark:bg-[#3a407ce5];
+    @apply bg-lime-50 dark:bg-[#3a407ce5];
 }
 
     .tile:hover {
@@ -139,14 +137,12 @@
         font-size: 1.875rem;
         font-weight: 700;
         transition: color 0.3s;
-        @apply text-gray-800;
-        @apply dark:text-blue-100;
+        @apply text-gray-800 dark:text-blue-100;
     }
 
     .tile p {
         margin-top: 0.5rem;
-        @apply text-gray-800;
-        @apply dark:text-blue-100;
+        @apply text-gray-800 dark:text-blue-100;
     }
 
     .tile:hover h2 {
@@ -174,25 +170,32 @@
         width: 100%;
         justify-content: space-around;
     }
-
 }
 
 
 @layer components {
     .table-th {
-        @apply border border-red-600 text-ellipsis overflow-hidden p-1;
+        @apply border dark:border-red-600 border-pink-400 text-ellipsis overflow-hidden p-1;
     }
 
     .table-td {
-        @apply border border-lime-400 pl-3 text-ellipsis overflow-hidden p-1;
+        @apply border dark:border-lime-400 border-emerald-400 pl-3 text-ellipsis overflow-hidden p-1;
     }
 
     .table-td-bottom-left {
-        @apply border border-lime-400 pl-3 text-ellipsis overflow-hidden p-1 rounded-bl-2xl;
+        @apply border dark:border-lime-400 border-emerald-400 pl-3 text-ellipsis overflow-hidden p-1 rounded-bl-2xl;
     }
 
 
     .table-td-bottom-right {
-        @apply border border-lime-400 pl-3 text-ellipsis overflow-hidden p-1 rounded-br-2xl;
+        @apply border dark:border-lime-400 border-emerald-400 pl-3 text-ellipsis overflow-hidden p-1 rounded-br-2xl;
+    }
+
+    .table-main {
+        @apply table-fixed place-self-center border dark:border-yellow-300 border-sky-400 border-separate rounded-2xl w-4/5 h-4/5 sticky bg-lime-50 dark:bg-[#3a407ce5] dark:text-blue-100 text-[#010211e5] whitespace-nowrap;
+    }
+
+    .div-table {
+        @apply flex flex-col place-content-center border-2 pt-32 border-amber-600 bg-sky-100 dark:bg-[#232141] min-w-full min-h-screen space-y-5 gap-y-5 place-items-center;
     }
 }

@@ -4,8 +4,8 @@
 @using ElectronicStudentJournal.Models
 @using Microsoft.EntityFrameworkCore;
 
-<div class="flex flex-col place-content-center border-2 pt-32 border-amber-600 bg-sky-200 dark:bg-[#232141] min-w-screen min-h-screen space-y-5 gap-y-5 place-items-center">
-    <table class="table-fixed place-self-center-safe border border-yellow-300 border-separate rounded-2xl  w-4/5 h-4/5 bg-cyan-200 sticky dark:bg-[#3a407ce5] dark:text-blue-100 text-black whitespace-nowrap">
+<div class="div-table">
+    <table class="table-main">
         <thead>
             <tr>
                 <th class="table-th rounded-tl-2xl">Id</th>
@@ -39,7 +39,7 @@
 
 
     @*<button type="button" class="rounded-full text-white bg-blue-500 h-9 w-24 hover:bg-blue-400 motion-reduce:hidden min-w-max px-3 @onclick="async () => await LoadData()">Dodaj ucznia</button>    *@
-    <button type="button" class="rounded-full text-white bg-blue-500 h-9 w-24 hover:bg-blue-400 motion-reduce:hidden min-w-max px-3 "
+    <button type="button" class="rounded-full text-white dark:bg-blue-500 bg-blue-400 h-9 w-24 hover:bg-blue-400 dark:hover:bg-blue-500 motion-reduce:hidden min-w-max px-3 "
     @onclick="LoadData">Dodaj ucznia</button>
 
 @*    <table>

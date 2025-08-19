@@ -2,25 +2,111 @@
 @using ElectronicStudentJournal.Models;
 @using BlazorCalendar
 @using BlazorCalendar.Models
+@using System.Globalization
 
-<h3>ClassTimetable</h3>
+<select class="dark:bg-[#3a407ce5] dark:text-blue-100" @onchange="LoadCalendar">
+    @foreach (string monthName in monthNames)
+    {
+        <option>@monthName</option>
+    }
+</select>
 
-<CalendarContainer DisplayedView="DisplayedView.Monthly" TasksList="TasksList.ToArray()" >
-	<MonthlyView  />
-</CalendarContainer>
+<table class="table-main">
+    <thead>
+        <tr>
+            @for(var dayIndex = 0; dayIndex < days.Count; dayIndex++)
+            {
+                <th class="table-th">
+                    @days[dayIndex]
+                </th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @for (var weekIndex = 0; weekIndex < weeks.Count(); weekIndex++)
+        {
+            <tr>
+                @for (var dayIndex = 0; dayIndex < weeks[weekIndex].Dates.Count(); dayIndex++)
+                {
+                    var wIndex = weekIndex;
+                    var dIndex = dayIndex;
+
+                    <td>
+                        @weeks[weekIndex].Dates[dayIndex].DateValue <br>
+
+                        <label> @weeks[weekIndex].Dates[dayIndex].Note </label>
+
+                        Cell number : [@weekIndex, @dayIndex]
+                    </td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>
+
+
 
 @code{
-	private List<Tasks> TasksList;
+    List<string> days = new List<string>();
+    List<string> monthNames= new List<string>();
+    List<WeekClass> weeks = new List<WeekClass>();
+    DateTime startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+    DateTime endDate = (new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1)).AddMonths(1).AddDays(-1);
 
-	protected override void OnInitialized()
-	{
-		TasksList = new()
-		{
-			new Tasks { ID = 1, DateStart = today.AddDays(8), DateEnd = today.AddDays(8), Code = "CP", Color = "#19C319", Caption = "Lorem ipsum dolor sit amet" },
-			new Tasks { ID = 2, DateStart = today.AddDays(50), DateEnd = today.AddDays(52), Code = "DEV", Color = "#FFD800", Caption = "Fusce quis purus eu ante" },
-			new Tasks { ID = 3, DateStart = today.AddDays(62), DateEnd = today.AddDays(62), Code = "DEV", Color = "#FFD800" },`
-			new Tasks { ID = 4, DateStart = today.AddDays(62), DateEnd = today.AddDays(62), Code = "FORM", Color = "#FFC3FF", Caption = "Ut sit amet turpis eget" } ,
-			new Tasks { ID = 5, DateStart = today.AddDays(73).AddHours(8), DateEnd = today.AddDays(73).AddHours(9), Code = "MEETING", Color = "#2DD7D7" }
-		};
-	}
+    protected override void OnInitialized()
+    {
+        monthNames = System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.MonthGenitiveNames.ToList();
+        GenerateCalendarHead();
+        GenerateCalendarBody();
+    }
+
+    public void LoadCalendar(ChangeEventArgs e )
+    {
+        var month = e.Value.ToString();
+        int monthIndex = DateTime.ParseExact(month, "MMMM", System.Globalization.CultureInfo.CreateSpecificCulture("pl-PL")).Month;
+        startDate = new DateTime(DateTime.Now.Year, monthIndex, 1);
+        endDate = (new DateTime(DateTime.Now.Year, monthIndex, 1)).AddMonths(1).AddDays(-1);
+    }
+
+    private void GenerateCalendarHead()
+    {
+        var day1 = new List<string>();
+        for (var dt = startDate; dt <= endDate; dt = dt.AddDays(1))
+        {
+            day1.Add(dt.ToString("dddd"));
+        }
+
+        days = day1.Distinct().ToList( );
+    }
+
+    private void GenerateCalendarBody()
+    {
+        weeks = new List<WeekClass>();
+        int flag = 0;
+        WeekClass week = new WeekClass();
+        List<DayEvent> dates = new List<DayEvent>();
+        var totalDays = (int)(endDate - startDate).TotalDays;
+        int countDays = 0;
+
+        for (var dt = startDate; dt <= endDate; dt = dt.AddDays(1))
+        {
+            flag++;
+
+            dates.Add(new DayEvent()
+            {
+                //DateValue = dt.ToString("dd-MMM-yyyy"),
+                DayName = dt.ToString("dddd")
+            });
+
+            if (flag == 7)
+            {
+                week = new WeekClass();
+                week.Dates = dates;
+                weeks.Add(week);
+                break;
+            }
+            countDays++;
+        }
+    }
+
 }
