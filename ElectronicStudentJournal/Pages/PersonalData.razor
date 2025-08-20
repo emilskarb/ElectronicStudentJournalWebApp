@@ -8,14 +8,14 @@
     <table class="table-main">
         <thead>
             <tr>
-                <th class="table-th rounded-tl-2xl">Id</th>
+                <th class="table-th">Id</th>
                 <th class="table-th">Imie</th>
                 <th class="table-th">Nazwisko</th>
                 <th class="table-th">Wiek</th>
                 <th class="table-th">Numer pesel</th>
                 <th class="table-th">Data urodzenia</th>
                 <th class="table-th">Numer telefonu</th>
-                <th class="table-th rounded-tr-2xl">Adres zamieszkania</th>
+                <th class="table-th">Adres zamieszkania</th>
                 @*<th>Ocena</th>*@
             </tr>
         </thead>
@@ -23,14 +23,14 @@
             @foreach (var stud in students)
             {
                 <tr>
-                    <td class="table-td-bottom-left">@stud.StudentId</td>
+                    <td class="table-td">@stud.StudentId</td>
                     <td class="table-td">@stud.FirstName</td>
                     <td class="table-td">@stud.LastName</td>
                     <td class="table-td">@stud.Age</td>
                     <td class="table-td">@stud.PeselNumber</td>
                     <td class="table-td">@stud.FormattedBirthDate</td>
                     <td class="table-td">@stud.PhoneNumber</td>
-                    <td class="table-td-bottom-right">@stud.HomeAddress</td>
+                    <td class="table-td">@stud.HomeAddress</td>
                     @*<td>@stud.Rating</td>*@
                 </tr>
             }   

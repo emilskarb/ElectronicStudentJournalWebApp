@@ -182,13 +182,20 @@
         @apply border dark:border-lime-400 border-emerald-400 pl-3 text-ellipsis overflow-hidden p-1;
     }
 
-    .table-td-bottom-left {
-        @apply border dark:border-lime-400 border-emerald-400 pl-3 text-ellipsis overflow-hidden p-1 rounded-bl-2xl;
+    .table-main thead tr:first-child th:first-child {
+        @apply rounded-tl-2xl;
     }
 
+    .table-main thead tr:first-child th:last-child {
+        @apply rounded-tr-2xl;
+    }
 
-    .table-td-bottom-right {
-        @apply border dark:border-lime-400 border-emerald-400 pl-3 text-ellipsis overflow-hidden p-1 rounded-br-2xl;
+    .table-main tbody tr:last-child td:first-child {
+        @apply rounded-bl-2xl;
+    }
+
+    .table-main tbody tr:last-child td:last-child {
+        @apply rounded-br-2xl;
     }
 
     .table-main {

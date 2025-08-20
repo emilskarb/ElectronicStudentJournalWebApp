@@ -4,49 +4,54 @@
 @using BlazorCalendar.Models
 @using System.Globalization
 
-<select class="dark:bg-[#3a407ce5] dark:text-blue-100" @onchange="LoadCalendar">
-    @foreach (string monthName in monthNames)
-    {
-        <option>@monthName</option>
-    }
-</select>
-
-<table class="table-main">
-    <thead>
-        <tr>
-            @for(var dayIndex = 0; dayIndex < days.Count; dayIndex++)
-            {
-                <th class="table-th">
-                    @days[dayIndex]
-                </th>
-            }
-        </tr>
-    </thead>
-    <tbody>
-        @for (var weekIndex = 0; weekIndex < weeks.Count(); weekIndex++)
+<div class="div-table">
+    <p>Total days: @DisplayTotalDays</p>
+    <select class="dark:bg-[#3a407ce5] dark:text-blue-100" @onchange="LoadCalendar">
+        @foreach (string monthName in monthNames)
         {
+            <option>@monthName</option>
+        }
+    </select>
+    <table class="table-main">
+        <thead>
             <tr>
-                @for (var dayIndex = 0; dayIndex < weeks[weekIndex].Dates.Count(); dayIndex++)
+                @for(var dayIndex = 0; dayIndex < days.Count; dayIndex++)
                 {
-                    var wIndex = weekIndex;
-                    var dIndex = dayIndex;
-
-                    <td>
-                        @weeks[weekIndex].Dates[dayIndex].DateValue <br>
-
-                        <label> @weeks[weekIndex].Dates[dayIndex].Note </label>
-
-                        Cell number : [@weekIndex, @dayIndex]
-                    </td>
+                    <th class="table-th">
+                        @days[dayIndex]
+                    </th>
                 }
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @for (var weekIndex = 0; weekIndex < weeks.Count(); weekIndex++)
+            {
+                <tr>
+                    @for (var dayIndex = 0; dayIndex < weeks[weekIndex].Dates.Count(); dayIndex++)
+                    {
+                        var wIndex = weekIndex;
+                        var dIndex = dayIndex;
 
+                        <td class="table-td h-28">
+                            @weeks[weekIndex].Dates[dayIndex].DateValue <br>
+
+                            <label> @weeks[weekIndex].Dates[dayIndex].Note </label>
+
+                            Cell number : [@weekIndex, @dayIndex]
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
 
 
 @code{
+    @inject ILogger<Calendar> Logger
+    private int DisplayTotalDays;
+
     List<string> days = new List<string>();
     List<string> monthNames= new List<string>();
     List<WeekClass> weeks = new List<WeekClass>();
@@ -55,7 +60,9 @@
 
     protected override void OnInitialized()
     {
-        monthNames = System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.MonthGenitiveNames.ToList();
+        monthNames = System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.MonthGenitiveNames.ToList()
+                        .Where(m => !string.IsNullOrEmpty(m)).ToList();
+        var totalDays = (int)(endDate - startDate).TotalDays + 1;
         GenerateCalendarHead();
         GenerateCalendarBody();
     }
@@ -66,6 +73,11 @@
         int monthIndex = DateTime.ParseExact(month, "MMMM", System.Globalization.CultureInfo.CreateSpecificCulture("pl-PL")).Month;
         startDate = new DateTime(DateTime.Now.Year, monthIndex, 1);
         endDate = (new DateTime(DateTime.Now.Year, monthIndex, 1)).AddMonths(1).AddDays(-1);
+        var totalDays = (int)(endDate - startDate).TotalDays + 1;
+        DisplayTotalDays = totalDays;
+
+        GenerateCalendarHead();
+        GenerateCalendarBody();
     }
 
     private void GenerateCalendarHead()
@@ -85,20 +97,32 @@
         int flag = 0;
         WeekClass week = new WeekClass();
         List<DayEvent> dates = new List<DayEvent>();
-        var totalDays = (int)(endDate - startDate).TotalDays;
-        int countDays = 0;
-
+        var totalDays = (int)(endDate - startDate).TotalDays + 1;
+        int countDays = 1;
+        DisplayTotalDays = totalDays;
+        Logger.LogInformation("Dni dla miesiąca TotalDays = {DaysCount}", totalDays);
+        
         for (var dt = startDate; dt <= endDate; dt = dt.AddDays(1))
         {
             flag++;
 
             dates.Add(new DayEvent()
             {
-                //DateValue = dt.ToString("dd-MMM-yyyy"),
+                DateValue = dt.ToString("dd-MMM-yyyy"),
                 DayName = dt.ToString("dddd")
             });
 
             if (flag == 7)
+            {
+                week = new WeekClass();
+                week.Dates = dates;
+                weeks.Add(week);
+
+                dates = new List<DayEvent>();
+                flag = 0;
+            }
+
+            if (countDays == totalDays)
             {
                 week = new WeekClass();
                 week.Dates = dates;
