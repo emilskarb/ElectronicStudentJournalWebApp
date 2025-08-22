@@ -9,3 +9,18 @@ public enum GradeRating
     BardzoDobry,
     Celujący
 }
+
+public enum ClassSubject
+{
+    Matematyka,
+    Fizyka,
+    Polski,
+    Angielski,
+    Historia,
+    Biologia,
+    Geografia,
+    Chemia,
+    Informatka,
+    Religia,
+    WychowanieFizyczne
+}

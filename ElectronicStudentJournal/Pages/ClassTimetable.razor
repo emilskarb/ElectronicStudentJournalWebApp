@@ -37,7 +37,7 @@
 
                             <label> @weeks[weekIndex].Dates[dayIndex].Note </label>
 
-                            Cell number : [@weekIndex, @dayIndex]
+                            @*Cell [@weekIndex, @dayIndex]*@
                         </td>
                     }
                 </tr>
@@ -82,55 +82,53 @@
 
     private void GenerateCalendarHead()
     {
-        var day1 = new List<string>();
-        for (var dt = startDate; dt <= endDate; dt = dt.AddDays(1))
-        {
-            day1.Add(dt.ToString("dddd"));
-        }
-
-        days = day1.Distinct().ToList( );
+        days = new List<string> {"Poniedziałek", "Wtorek", "Środa", "Czwartek", "Piątek", "Sobota", "Niedziela" };
+        //var culture = System.Globalization.CultureInfo.CurrentCulture;
+        //days = culture.DateTimeFormat.DayNames.Skip(1).Concat(culture.DateTimeFormat.DayNames.Take(1)).ToList();
     }
 
     private void GenerateCalendarBody()
     {
         weeks = new List<WeekClass>();
-        int flag = 0;
         WeekClass week = new WeekClass();
         List<DayEvent> dates = new List<DayEvent>();
+        int daysToPad = ((int)startDate.DayOfWeek + 6) % 7;
+
         var totalDays = (int)(endDate - startDate).TotalDays + 1;
-        int countDays = 1;
         DisplayTotalDays = totalDays;
         Logger.LogInformation("Dni dla miesiąca TotalDays = {DaysCount}", totalDays);
         
+        for (int i = 0; i < daysToPad; i++)
+        {
+            dates.Add(new DayEvent());
+        }
+
         for (var dt = startDate; dt <= endDate; dt = dt.AddDays(1))
         {
-            flag++;
-
             dates.Add(new DayEvent()
             {
                 DateValue = dt.ToString("dd-MMM-yyyy"),
                 DayName = dt.ToString("dddd")
             });
 
-            if (flag == 7)
+            if (dates.Count == 7)
             {
-                week = new WeekClass();
-                week.Dates = dates;
-                weeks.Add(week);
-
+                weeks.Add(new WeekClass { Dates = dates });
                 dates = new List<DayEvent>();
-                flag = 0;
-            }
 
-            if (countDays == totalDays)
-            {
-                week = new WeekClass();
-                week.Dates = dates;
-                weeks.Add(week);
-                break;
+                //week = new WeekClass();
+                //week.Dates = dates;
+                //weeks.Add(week);
+                //dates = new List<DayEvent>();
             }
-            countDays++;
+        }
+
+        if (dates.Count > 0)
+        {
+            weeks.Add(new WeekClass { Dates = dates });
+            //week = new WeekClass();
+            //week.Dates = dates;
+            //weeks.Add(week);
         }
     }
-
 }

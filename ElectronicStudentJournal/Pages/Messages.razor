@@ -1,53 +1,61 @@
 ﻿@page "/messages"
-@using ElectronicStudentJournal.Models;
-
-<h3>Messages</h3>
-
-
-<EditForm Model="StudentModel">
-    <input type="search" class="rounded-full text-white bg-blue-500 h-9 w-24 hover:bg-blue-400 motion-reduce:hidden min-w-max px-3 "
-           @bind-value="SearchStudentName" @bind-value:event="oninput" placeholder="Szukaj po imieniu" />
-</EditForm>
+@using ElectronicStudentJournal.Models
+@using System.Globalization
+@using ElectronicStudentJournal.Data
 
 
-@if (!StudentsList.Any())
-{
-    <p>nie ma</p>
-}
-else
-{
-    <table>
-        <thead>
-            <tr>
-                <td>imie</td>
-                <td>nazwisko</td>
-                <td>wiek</td>
-                <td>data urodzenia</td>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var student in FilteredStudents)
-            {
-                <tr>
-                    <td>@student.FirstName</td>
-                    <td>@student.LastName</td>
-                    <td>@student.Age</td>
-                    <td>@student.FormattedBirthDate</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
+<section class="p-2 border border-pink-400 gap-4">
+    <div class="container">
+        <h1>Poniedziałek</h1>
+    </div>
+    <SortableList Items="ClassSubjects" Context="subject" OnUpdate="SortList">
+        <SortableItemTemplate>
+            @*<div class="p-2 border border-pink-400 gap-4">*@
+                <div class="border p-2 border-lime-400 rounded">@subject.JakiPrzedmiot</div>
+            @*</div>*@
+        </SortableItemTemplate>
+    </SortableList>
+</section>
 
-@code {
-    List<StudentModel> StudentsList = new();
+@code{
+    public class LessonsForDay
+    {
+        public ClassSubject JakiPrzedmiot { get; set; }
+        public string Nauczyciel { get; set; }
+    }
 
-    StudentModel StudentModel = new StudentModel();
+    public List<LessonsForDay> ClassSubjects { get; set; } = new List<LessonsForDay>
+    {
+        new LessonsForDay { JakiPrzedmiot = ClassSubject.Matematyka, Nauczyciel = "Mark" },
+        new LessonsForDay { JakiPrzedmiot = ClassSubject.Matematyka, Nauczyciel = "Jan Kowalski" },
+        new LessonsForDay { JakiPrzedmiot = ClassSubject.Polski, Nauczyciel = "Anna Nowak" },
+        new LessonsForDay { JakiPrzedmiot = ClassSubject.Angielski, Nauczyciel = "Elizabeth Smith" },
+        new LessonsForDay { JakiPrzedmiot = ClassSubject.Fizyka, Nauczyciel = "Piotr Zieliński" },
+        new LessonsForDay { JakiPrzedmiot = ClassSubject.Chemia, Nauczyciel = "Maria Skłodowska" },
+        new LessonsForDay { JakiPrzedmiot = ClassSubject.Biologia, Nauczyciel = "Ewa Adamczyk" },
+        new LessonsForDay { JakiPrzedmiot = ClassSubject.Historia, Nauczyciel = "Tomasz Jaworski" },
+        new LessonsForDay { JakiPrzedmiot = ClassSubject.Geografia, Nauczyciel = "Krzysztof Woliński" },
+        new LessonsForDay { JakiPrzedmiot = ClassSubject.Informatka, Nauczyciel = "Adam Bajt" },
+        new LessonsForDay { JakiPrzedmiot = ClassSubject.WychowanieFizyczne, Nauczyciel = "Robert Lewandowski" }
+    };
 
-    public string SearchStudentName = "";
+    public void SortList((int oldIndex, int newIndex) indicies)
+    {
+        var (oldIndex, newIndex) = indicies;
 
-    List<StudentModel> FilteredStudents => StudentsList
-                                            .Where(student => student.FirstName.ToLower().Contains(SearchStudentName.ToLower())).ToList();
+        var items = this.ClassSubjects;
+        var itemToMove = items[oldIndex];
+        items.RemoveAt(oldIndex);
+
+        if (newIndex < items.Count)
+        {
+            items.Insert(newIndex, itemToMove);
+        }
+        else
+        {
+            items.Add(itemToMove);
+        }
 
 
+    }
 }
