@@ -5,63 +5,104 @@
 @using System.Globalization
 
 <div class="div-table">
-    <p>Total days: @DisplayTotalDays</p>
-    <select class="dark:bg-[#3a407ce5] dark:text-blue-100" @onchange="LoadCalendar">
-        @foreach (string monthName in monthNames)
-        {
-            <option>@monthName</option>
-        }
-    </select>
-    <table class="table-main">
-        <thead>
-            <tr>
-                @for(var dayIndex = 0; dayIndex < days.Count; dayIndex++)
-                {
-                    <th class="table-th">
-                        @days[dayIndex]
-                    </th>
-                }
-            </tr>
-        </thead>
-        <tbody>
-            @for (var weekIndex = 0; weekIndex < weeks.Count(); weekIndex++)
+<button class="button-main relative" @onclick="IsTimetableMonthView">Zmień widok</button>
+    @if (IsMonthView)
+    {  
+        <p>Total days: @DisplayTotalDays</p>
+        <select class="dark:bg-[#3a407ce5] dark:text-blue-100" @onchange="LoadCalendar">
+            @foreach (string monthName in monthNames)
             {
+                <option>@monthName</option>
+            }
+        </select>
+        <table class="table-main">
+            <thead>
                 <tr>
-                    @for (var dayIndex = 0; dayIndex < weeks[weekIndex].Dates.Count(); dayIndex++)
+                    @for(var dayIndex = 0; dayIndex < days.Count; dayIndex++)
                     {
-                        var wIndex = weekIndex;
-                        var dIndex = dayIndex;
-
-                        <td class="table-td h-28">
-                            @weeks[weekIndex].Dates[dayIndex].DateValue <br>
-
-                            <label> @weeks[weekIndex].Dates[dayIndex].Note </label>
-
-                            @*Cell [@weekIndex, @dayIndex]*@
-                        </td>
+                        <th class="table-th">
+                            @days[dayIndex]
+                        </th>
                     }
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @for (var weekIndex = 0; weekIndex < weeks.Count(); weekIndex++)
+                {
+                    <tr>
+                        @for (var dayIndex = 0; dayIndex < weeks[weekIndex].Dates.Count(); dayIndex++)
+                        {
+                            var wIndex = weekIndex;
+                            var dIndex = dayIndex;
 
+                            <td class="table-td h-28">
+                                @weeks[weekIndex].Dates[dayIndex].DateValue <br>
+
+                                <label> @weeks[weekIndex].Dates[dayIndex].Note </label>
+
+                                @*Cell [@weekIndex, @dayIndex]*@
+                            </td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <table class="table-main">
+            <thead>
+                <tr>
+                    @for (var dayIndex = 0; dayIndex < days.Count; dayIndex++)
+                    {
+                        <th class="table-th">
+                            @days[dayIndex]
+                        </th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    @foreach (var x in days)
+                    {
+                        <th>
+                            <SortableList Items="ClassSubjects" Context="subject" OnUpdate="SortList">
+                                <SortableItemTemplate>
+                                        <div class="sortable-tile">@subject.JakiPrzedmiot</div>
+                                </SortableItemTemplate>
+                            </SortableList>
+                        </th>
+                    }
+                </tr>
+            </tbody>
+        </table>
+    }
 </div>
 
 
 @code{
     @inject ILogger<Calendar> Logger
     private int DisplayTotalDays;
-
+    private bool IsMonthView = true;
     List<string> days = new List<string>();
     List<string> monthNames= new List<string>();
     List<WeekClass> weeks = new List<WeekClass>();
     DateTime startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
     DateTime endDate = (new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1)).AddMonths(1).AddDays(-1);
 
+    private void IsTimetableMonthView() {
+        IsMonthView = !IsMonthView;
+    }
+
+    //private void IsTimetableMonthView() => IsMonthView = !IsMonthView;
+
     protected override void OnInitialized()
     {
-        monthNames = System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.MonthGenitiveNames.ToList()
-                        .Where(m => !string.IsNullOrEmpty(m)).ToList();
+        monthNames = System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.MonthNames
+                        .Where(m => !string.IsNullOrEmpty(m))
+                        .Select(m => m[0].ToString().ToUpper() + m.Substring(1)).ToList();
+                        //.Select(m => char.ToUpper(m[0]) + m.Substring(1)).ToList();
+                        //.Select(m => string).ToList();
         var totalDays = (int)(endDate - startDate).TotalDays + 1;
         GenerateCalendarHead();
         GenerateCalendarBody();
@@ -82,9 +123,12 @@
 
     private void GenerateCalendarHead()
     {
-        days = new List<string> {"Poniedziałek", "Wtorek", "Środa", "Czwartek", "Piątek", "Sobota", "Niedziela" };
-        //var culture = System.Globalization.CultureInfo.CurrentCulture;
-        //days = culture.DateTimeFormat.DayNames.Skip(1).Concat(culture.DateTimeFormat.DayNames.Take(1)).ToList();
+        //days = new List<string> {"Poniedziałek", "Wtorek", "Środa", "Czwartek", "Piątek", "Sobota", "Niedziela" };
+        var culture = System.Globalization.CultureInfo.CurrentCulture;
+        days = culture.DateTimeFormat.DayNames.Skip(1).Concat(culture.DateTimeFormat.DayNames.Take(1))
+                .Where(dzien => !string.IsNullOrEmpty(dzien))
+                .Select(dzien => culture.TextInfo.ToTitleCase(dzien)).ToList();
+                //.Select(dzien => dzien[0].ToString().ToUpper() + dzien.Substring(1)).ToList();
     }
 
     private void GenerateCalendarBody()
@@ -129,6 +173,47 @@
             //week = new WeekClass();
             //week.Dates = dates;
             //weeks.Add(week);
+        }
+    }
+
+
+
+    public class LessonsForDay
+    {
+        public ClassSubject JakiPrzedmiot { get; set; }
+        public string Nauczyciel { get; set; }
+    }
+
+    public List<LessonsForDay> ClassSubjects { get; set; } = new List<LessonsForDay>
+    {
+        new LessonsForDay { JakiPrzedmiot = ClassSubject.Matematyka, Nauczyciel = "Mark" },
+        new LessonsForDay { JakiPrzedmiot = ClassSubject.Matematyka, Nauczyciel = "Jan Kowalski" },
+        new LessonsForDay { JakiPrzedmiot = ClassSubject.Polski, Nauczyciel = "Anna Nowak" },
+        new LessonsForDay { JakiPrzedmiot = ClassSubject.Angielski, Nauczyciel = "Elizabeth Smith" },
+        new LessonsForDay { JakiPrzedmiot = ClassSubject.Fizyka, Nauczyciel = "Piotr Zieliński" },
+        new LessonsForDay { JakiPrzedmiot = ClassSubject.Chemia, Nauczyciel = "Maria Skłodowska" },
+        new LessonsForDay { JakiPrzedmiot = ClassSubject.Biologia, Nauczyciel = "Ewa Adamczyk" },
+        new LessonsForDay { JakiPrzedmiot = ClassSubject.Historia, Nauczyciel = "Tomasz Jaworski" },
+        new LessonsForDay { JakiPrzedmiot = ClassSubject.Geografia, Nauczyciel = "Krzysztof Woliński" },
+        new LessonsForDay { JakiPrzedmiot = ClassSubject.Informatka, Nauczyciel = "Adam Bajt" },
+        new LessonsForDay { JakiPrzedmiot = ClassSubject.Wf, Nauczyciel = "Robert Lewandowski" }
+    };
+
+    public void SortList((int oldIndex, int newIndex) indicies)
+    {
+        var (oldIndex, newIndex) = indicies;
+
+        var items = this.ClassSubjects;
+        var itemToMove = items[oldIndex];
+        items.RemoveAt(oldIndex);
+
+        if (newIndex < items.Count)
+        {
+            items.Insert(newIndex, itemToMove);
+        }
+        else
+        {
+            items.Add(itemToMove);
         }
     }
 }

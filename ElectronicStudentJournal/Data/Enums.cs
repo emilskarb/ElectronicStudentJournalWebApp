@@ -22,5 +22,5 @@ public enum ClassSubject
     Chemia,
     Informatka,
     Religia,
-    WychowanieFizyczne
+    Wf
 }

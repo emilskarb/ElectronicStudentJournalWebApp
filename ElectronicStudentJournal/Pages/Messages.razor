@@ -3,19 +3,31 @@
 @using System.Globalization
 @using ElectronicStudentJournal.Data
 
+<div class="flex">
 
-<section class="p-2 border border-pink-400 gap-4">
-    <div class="container">
-        <h1>Poniedziałek</h1>
-    </div>
-    <SortableList Items="ClassSubjects" Context="subject" OnUpdate="SortList">
-        <SortableItemTemplate>
-            @*<div class="p-2 border border-pink-400 gap-4">*@
-                <div class="border p-2 border-lime-400 rounded">@subject.JakiPrzedmiot</div>
-            @*</div>*@
-        </SortableItemTemplate>
-    </SortableList>
-</section>
+    <section class="pt-2 px-2 border border-pink-400 gap-4">
+        <div class="border border-green-300 p-2">
+            <h1>Poniedziałek</h1>
+        </div>
+        <SortableList Items="ClassSubjects" Context="subject" OnUpdate="SortList" Group="TimetableWeek">
+            <SortableItemTemplate>
+                    <div class="sortable-tile">@subject.JakiPrzedmiot</div>
+            </SortableItemTemplate>
+        </SortableList>
+    </section>
+
+    <section class="pt-2 px-2 border border-pink-400 gap-4">
+        <div class="border border-green-300 p-2">
+            <h1>Poniedziałek</h1>
+        </div>
+        <SortableList Items="ClassSubjects" Context="subject" OnUpdate="SortList" Group="TimetableWeek">
+            <SortableItemTemplate>
+                    <div class="sortable-tile">@subject.JakiPrzedmiot</div>
+            </SortableItemTemplate>
+        </SortableList>
+    </section>
+
+</div>
 
 @code{
     public class LessonsForDay
@@ -36,7 +48,7 @@
         new LessonsForDay { JakiPrzedmiot = ClassSubject.Historia, Nauczyciel = "Tomasz Jaworski" },
         new LessonsForDay { JakiPrzedmiot = ClassSubject.Geografia, Nauczyciel = "Krzysztof Woliński" },
         new LessonsForDay { JakiPrzedmiot = ClassSubject.Informatka, Nauczyciel = "Adam Bajt" },
-        new LessonsForDay { JakiPrzedmiot = ClassSubject.WychowanieFizyczne, Nauczyciel = "Robert Lewandowski" }
+        new LessonsForDay { JakiPrzedmiot = ClassSubject.Wf, Nauczyciel = "Robert Lewandowski" }
     };
 
     public void SortList((int oldIndex, int newIndex) indicies)
@@ -55,7 +67,5 @@
         {
             items.Add(itemToMove);
         }
-
-
     }
 }
