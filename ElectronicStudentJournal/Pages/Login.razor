@@ -1,0 +1,25 @@
+﻿@page "/login"
+@using ElectronicStudentJournal.Models;
+
+<h3>Login</h3>
+
+<EditForm Model="user" OnSubmit="HandleLogin">
+    <div class="border border-lime-400 flex flex-col gap-4 mb-4 p-4"> 
+        <label for="username">Username</label>
+        <InputText id="username" @bind-Value="user.Username" class="form-control" />
+
+        <label for="password">Password</label>
+        <InputText id="password" @bind-Value="user.Password" class="form-control" />
+    </div>
+
+    <button type="submit" class="button-main">Login</button>
+</EditForm>
+
+@code {
+    private User user = new User();
+
+    private void HandleLogin()
+    {
+        Console.WriteLine("Log me in");
+    }
+}

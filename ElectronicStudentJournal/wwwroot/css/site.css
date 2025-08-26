@@ -799,6 +799,10 @@ html, body {
   margin-right: auto;
 }
 
+.mb-4 {
+  margin-bottom: 1rem;
+}
+
 .me-5 {
   margin-inline-end: 1.25rem;
 }
@@ -843,6 +847,10 @@ html, body {
   height: 2.25rem;
 }
 
+.h-auto {
+  height: auto;
+}
+
 .w-11 {
   width: 2.75rem;
 }
@@ -866,6 +874,10 @@ html, body {
 
 .cursor-pointer {
   cursor: pointer;
+}
+
+.flex-col {
+  flex-direction: column;
 }
 
 .items-center {
@@ -898,9 +910,23 @@ html, body {
   border-width: 1px;
 }
 
+.border-4 {
+  border-width: 4px;
+}
+
 .border-green-300 {
   --tw-border-opacity: 1;
   border-color: rgb(134 239 172 / var(--tw-border-opacity, 1));
+}
+
+.border-lime-400 {
+  --tw-border-opacity: 1;
+  border-color: rgb(163 230 53 / var(--tw-border-opacity, 1));
+}
+
+.border-orange-500 {
+  --tw-border-opacity: 1;
+  border-color: rgb(249 115 22 / var(--tw-border-opacity, 1));
 }
 
 .border-pink-400 {
@@ -925,6 +951,10 @@ html, body {
 
 .p-2 {
   padding: 0.5rem;
+}
+
+.p-4 {
+  padding: 1rem;
 }
 
 .px-2 {
@@ -1274,6 +1304,11 @@ html, body {
     width: 100%;
     justify-content: space-around;
   }
+}
+
+.day-column .sortable-list {
+  min-height: 160px;
+  height: 100%;
 }
 
 .after\:absolute::after {

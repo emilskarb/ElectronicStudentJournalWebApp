@@ -213,4 +213,10 @@
     .sortable-tile {
         @apply border-2 p-2 border-lime-400 rounded text-blue-500 my-2 bg-white;
     }
+
+
+}
+.day-column .sortable-list {
+    min-height: 160px;
+    height: 100%;
 }

@@ -4,6 +4,11 @@
   to the markup inside the render fragment.
 */
 
+.sortable-list-container {
+    min-height: 160px;
+    height: 100%;
+}
+
 ::deep .sortable-ghost {
   visibility: hidden;
 }
