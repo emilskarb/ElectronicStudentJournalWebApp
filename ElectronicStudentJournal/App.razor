@@ -1,12 +1,44 @@
 ﻿<Router AppAssembly="@typeof(App).Assembly">
     <Found Context="routeData">
-        <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
+        <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" >
+        
+        
+        <NotAuthorized>
         <FocusOnNavigate RouteData="@routeData" Selector="h1" />
+            <LayoutView Layout="@typeof(LoginLayout)">
+                <p>Jesteś niezalogowany</p>
+            </LayoutView>
+        </NotAuthorized>
+        </AuthorizeRouteView>
+
     </Found>
     <NotFound>
         <PageTitle>Not found</PageTitle>
-        <LayoutView Layout="@typeof(MainLayout)">
-            <p role="alert">Sorry, there's nothing at this address.</p>
+        <CascadingAuthenticationState>
+            <LayoutView Layout="@typeof(MainLayout)">
+                <p role="alert">Sorry, there's nothing at this address.</p>
+            </LayoutView>
+        </CascadingAuthenticationState>
+    </NotFound>
+</Router>
+
+
+<Router AppAssembly="@typeof(App).Assembly">
+    <Found Context="routeData">
+        <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
+            <NotAuthorized>
+                @* Jeśli użytkownik nie jest zalogowany... *@
+                <LayoutView Layout="@typeof(LoginLayout)">
+                    @* ...pokaż mu stronę w prostym layoucie. *@
+                    <p class="text-center text-white p-4">Proszę się zalogować, aby kontynuować.</p>
+                </LayoutView>
+            </NotAuthorized>
+        </AuthorizeRouteView>
+    </Found>
+    <NotFound>
+        <PageTitle>Not found</PageTitle>
+        <LayoutView Layout="@typeof(LoginLayout)">
+            <p role="alert">Niestety, nic tu nie ma.</p>
         </LayoutView>
     </NotFound>
 </Router>

@@ -19,13 +19,11 @@
         <div class="border border-green-300 p-2">
             <h1>Wtorek</h1>
         </div>
-        @*<div class="h-auto border-4 border-orange-500 p-2">*@
             <SortableList Items="LessonsForTuesday" Context="subject" OnUpdate="SortList" Group="Tuesday" OnRemove="ListTwoRemove">
                 <SortableItemTemplate>
                         <div class="sortable-tile">@subject.JakiPrzedmiot</div>
                 </SortableItemTemplate>
             </SortableList>
-        @*</div>*@
     </section>
 </div>
 

@@ -1,0 +1,44 @@
+﻿@page "/login"
+@using ElectronicStudentJournal.Models;
+
+@*<h3>Login 213231</h3>*@
+
+<AuthorizeView>
+    <Authorized>
+        <div class="border border-red-400 flex flex-col gap-4 mb-4 p-4"> 
+            <a href="Identity/Account/Manage">Witaj @context.User.Identity?.Name!</a>
+            <form method="post" action="Identity/Account/Logout">
+                <button type="submit" class="button-main">Wyloguj</button>
+            </form>
+        </div>
+    </Authorized>
+
+    <NotAuthorized>
+        <div class="border border-lime-400 flex flex-col gap-4 mb-4 p-4"> 
+            <a href="Identity/Account/Register">Rejestracja</a>
+            <a href="Identity/Account/Login">Zaloguj się</a>
+        </div>
+    </NotAuthorized>
+
+
+
+
+@*    
+    <EditForm Model="user" >
+        <div class="border border-lime-400 flex flex-col gap-4 mb-4 p-4"> 
+            <label for="username">Username</label>
+            <InputText id="username" @bind-Value="user.Username" class="form-control" />
+
+            <label for="password">Password</label>
+            <InputText id="password" @bind-Value="user.Password" class="form-control" />
+        </div>
+
+        <button type="submit" class="button-main">Login</button>
+    </EditForm>
+*@
+
+</AuthorizeView>
+
+@code {
+
+}
